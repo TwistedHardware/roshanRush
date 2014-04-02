@@ -1,5 +1,36 @@
 from django.contrib import admin
-from .models import DataGroup, DataSetType, DataSet, FeatureType, Feature, Record
+import models
+
+
+class DateFeatureInline(admin.TabularInline):
+    model = models.DateFeature
+    extra = 0
+
+
+class NumberFeatureInline(admin.TabularInline):
+    model = model = models.NumberFeature
+    extra = 0
+
+
+class TextFeatureInline(admin.TabularInline):
+    model = model = models.TextFeature
+    extra = 0
+    
+
+class ImageFeatureInline(admin.TabularInline):
+    model = model = models.ImageFeature
+    extra = 0
+    
+
+class RecordLinkFeatureInline(admin.TabularInline):
+    model = model = models.RecordLinkFeature
+    extra = 0
+    
+
+class BooleanFeatureInline(admin.TabularInline):
+    model = model = models.BooleanFeature
+    extra = 0
+
 
 class DataGroupAdmin(admin.ModelAdmin):
     """
@@ -90,9 +121,9 @@ class RecordAdmin(admin.ModelAdmin):
     list_filter = []
 
 
-admin.site.register(DataGroup, DataGroupAdmin)
-admin.site.register(DataSetType, DataSetTypeAdmin)
-admin.site.register(DataSet, DataSetAdmin)
-admin.site.register(FeatureType, FeatureTypeAdmin)
-admin.site.register(Feature, FeatureAdmin)
-admin.site.register(Record, RecordAdmin)
+admin.site.register(models.DataGroup, DataGroupAdmin)
+admin.site.register(models.DataSetType, DataSetTypeAdmin)
+admin.site.register(models.DataSet, DataSetAdmin)
+admin.site.register(models.FeatureType, FeatureTypeAdmin)
+admin.site.register(models.Feature, FeatureAdmin)
+admin.site.register(models.Record, RecordAdmin)
