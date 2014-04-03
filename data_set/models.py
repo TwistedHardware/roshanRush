@@ -45,6 +45,7 @@ class DataSet(models.Model):
     """
     name = models.CharField(max_length=200)
     data_group = models.ForeignKey(DataGroup)
+    type = models.ForeignKey(DataSetType)
     
     """
     Methods

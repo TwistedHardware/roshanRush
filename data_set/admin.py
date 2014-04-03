@@ -32,6 +32,21 @@ class BooleanFeatureInline(admin.TabularInline):
     extra = 0
 
 
+class RecordInline(admin.TabularInline):
+    model = model = models.Record
+    extra = 0
+
+
+class DataSetInline(admin.TabularInline):
+    model = model = models.DataSet
+    extra = 0
+
+
+class FeatureInline(admin.TabularInline):
+    model = model = models.Feature
+    extra = 0
+
+
 class DataGroupAdmin(admin.ModelAdmin):
     """
     Manages admin interface for data groups
@@ -45,6 +60,7 @@ class DataGroupAdmin(admin.ModelAdmin):
                     ]
     filter_horizontal = []
     list_filter = []
+    inlines = [DataSetInline]
 
 
 class DataSetTypeAdmin(admin.ModelAdmin):
@@ -54,12 +70,14 @@ class DataSetTypeAdmin(admin.ModelAdmin):
     list_per_page = 100
     fields = [
               'name',
+              'columns'
               ]
     list_display = [
                     'name',
                     ]
-    filter_horizontal = []
+    filter_horizontal = ['columns']
     list_filter = []
+    inlines = [DataSetInline]
 
 class DataSetAdmin(admin.ModelAdmin):
     """
@@ -68,12 +86,20 @@ class DataSetAdmin(admin.ModelAdmin):
     list_per_page = 100
     fields = [
               'name',
+              'data_group',
+              'type',
               ]
     list_display = [
                     'name',
+                    'data_group',
+                    'type',
                     ]
     filter_horizontal = []
-    list_filter = []
+    list_filter = [
+              'data_group',
+              'type',
+                   ]
+    inlines = [RecordInline]
 
 
 class FeatureTypeAdmin(admin.ModelAdmin):
@@ -89,6 +115,7 @@ class FeatureTypeAdmin(admin.ModelAdmin):
                     ]
     filter_horizontal = []
     list_filter = []
+    inlines = [FeatureInline]
 
 
 class FeatureAdmin(admin.ModelAdmin):
@@ -98,9 +125,17 @@ class FeatureAdmin(admin.ModelAdmin):
     list_per_page = 100
     fields = [
               'name',
+              'description',
+              'formula',
+              'type',
+              'parent',
               ]
     list_display = [
-                    'name',
+              'name',
+              'description',
+              'formula',
+              'type',
+              'parent',
                     ]
     filter_horizontal = []
     list_filter = []
@@ -112,13 +147,28 @@ class RecordAdmin(admin.ModelAdmin):
     """
     list_per_page = 100
     fields = [
+              'create_date',
               'name',
+              'data_set',
+              'original_id',
               ]
     list_display = [
-                    'name',
+              'create_date',
+              'name',
+              'data_set',
+              'original_id',
                     ]
     filter_horizontal = []
     list_filter = []
+    inlines = [
+               NumberFeatureInline,
+               DateFeatureInline,
+               TextFeatureInline,
+               ImageFeatureInline,
+               RecordLinkFeatureInline,
+               BooleanFeatureInline,
+               
+               ]
 
 
 admin.site.register(models.DataGroup, DataGroupAdmin)

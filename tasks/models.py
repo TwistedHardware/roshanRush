@@ -1,5 +1,29 @@
 from django.db import models
 
+
+class Worker(models.Model):
+    """
+    Represents a task that the system executes
+    """
+    
+    """
+    Options
+    """
+    
+    """
+    Fields
+    """
+    ip = models.IPAddressField()
+    concurrency = models.IntegerField(default=8)
+    online = models.BooleanField(default=False)
+    
+    """
+    Methods
+    """
+    def __unicode__(self):
+        return self.ip
+
+
 class Task(models.Model):
     """
     Represents a task that the system executes
@@ -28,6 +52,7 @@ class Task(models.Model):
     progress_details = models.TextField(null=True, blank=True)
     estimated_finish_time = models.DateTimeField(null=True, blank=True)
     celery_id = models.CharField(max_length=200)
+    worker = models.ForeignKey(Worker, null=True, blank=True)
     
     """
     Methods
