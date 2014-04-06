@@ -126,6 +126,7 @@ a:hover {color: #9f2125; text-decoration: none; }
 	bottom:0px;
 	width:100%;
 	height: 57px;
+	z-index:1;
 }
 
 .socialIcons
