@@ -1,7 +1,7 @@
 @font-face
 {
     font-family: 'jockey-one';
-    src: url('/media/public/design1/fonts/JockeyOne-Regular.otf') format('opentype');
+    src: url('media/public/design1/fonts/JockeyOne-Regular.otf') format('opentype');
 }
 
 .topPanel a:link {color: #ffffff; text-decoration: none; }
@@ -22,7 +22,7 @@ a:hover {color: #9f2125; text-decoration: none; }
 
 .topPanel
 {
-	background-image: url('/media/public/design1/images/top-backgroud-1.png');
+	background-image: url('media/public/design1/images/top-backgroud-1.png');
 	background-position: center bottom;
 	position: fixed;
 	bottom:57px;
@@ -78,22 +78,22 @@ a:hover {color: #9f2125; text-decoration: none; }
 
 .homeLink
 {
-	background-image: url('/media/public/design1/images/home-icon.png');
+	background-image: url('media/public/design1/images/home-icon.png');
 }
 
 .downloadLink
 {
-	background-image: url('/media/public/design1/images/download-icon.png');
+	background-image: url('media/public/design1/images/download-icon.png');
 }
 
 .featuresLink
 {
-	background-image: url('/media/public/design1/images/features-icon.png');
+	background-image: url('media/public/design1/images/features-icon.png');
 }
 
 .tutorialLink
 {
-	background-image: url('/media/public/design1/images/tutorial-icon.png');
+	background-image: url('media/public/design1/images/tutorial-icon.png');
 	background-size:23px 30px;
 }
 
@@ -120,7 +120,7 @@ a:hover {color: #9f2125; text-decoration: none; }
 .footer
 {
 	color: #ffffff;
-	background-image: url('/media/public/design1/images/footer-background1.png');
+	background-image: url('media/public/design1/images/footer-background1.png');
 	background-position: center top;
 	position: fixed;
 	bottom:0px;
