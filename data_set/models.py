@@ -26,7 +26,7 @@ class DataSetType(models.Model):
     Fields
     """
     name = models.CharField(max_length=200)
-    columns = models.ManyToManyField("Feature", limit_choices_to={'parent': None})
+    columns = models.ManyToManyField("Feature", limit_choices_to={"parent": None})
     
     """
     Methods
@@ -63,6 +63,12 @@ class FeatureType(models.Model):
     Fields
     """
     name = models.CharField(max_length=200)
+    
+    """
+    Methods
+    """
+    def __unicode__(self):
+        return self.name
 
 
 class Feature(models.Model):
@@ -78,6 +84,12 @@ class Feature(models.Model):
     formula = models.TextField(null=True, blank=True)
     type = models.ForeignKey(FeatureType)
     parent = models.ForeignKey("self", null=True, blank=True)
+    
+    """
+    Methods
+    """
+    def __unicode__(self):
+        return self.name
 
 
 class Record(models.Model):
@@ -186,7 +198,7 @@ class ImageFeature(models.Model):
     """
     record = models.ForeignKey(Record)
     feature = models.ForeignKey(Feature)
-    value = models.ImageField(upload_to='images', null=True, blank=True)
+    value = models.ImageField(upload_to="images", null=True, blank=True)
     
     """
     Methods
@@ -213,3 +225,4 @@ class RecordLinkFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
+    
