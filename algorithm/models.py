@@ -90,6 +90,12 @@ class Algorithm(models.Model):
     type = models.ForeignKey(AlgorithmType)
     library = models.ForeignKey(Library, null=True, blank=True)
     import_code = models.TextField(null=True, blank=True)
+    feature_loader = models.TextField(null=True, blank=True)
+    feature_preparation = models.TextField(null=True, blank=True)
+    result_preparation = models.TextField(null=True, blank=True)
+    training = models.TextField(null=True, blank=True)
+    prediction = models.TextField(null=True, blank=True)
+    test_accuracy = models.TextField(null=True, blank=True)
     
     """
     Methods
@@ -109,6 +115,8 @@ class AlgorithmParameter(models.Model):
     name = models.CharField(max_length=200)
     default_value = models.CharField(max_length=200)
     help = models.CharField(max_length=200, null=True, blank=True)
+    min_value = models.FloatField(null=True, blank=True)
+    max_value = models.FloatField(null=True, blank=True)
     
     """
     Methods
@@ -157,6 +165,13 @@ class TrainedModel(models.Model):
     result = models.ForeignKey(Feature, null=True, blank=True)
     result_offest = models.IntegerField(default=1)
     status = models.CharField(max_length=20, choices=status_options)
+    import_code = models.TextField(null=True, blank=True)
+    feature_loader = models.TextField(null=True, blank=True)
+    feature_preparation = models.TextField(null=True, blank=True)
+    result_preparation = models.TextField(null=True, blank=True)
+    training = models.TextField(null=True, blank=True)
+    prediction = models.TextField(null=True, blank=True)
+    test_accuracy = models.TextField(null=True, blank=True)
     
     """
     Methods
