@@ -41,7 +41,7 @@ class ProcessOperation(models.Model):
 
 class ProcessOperationLink(models.Model):
     """
-    Represents an operation link that can connect it to other operations
+    Represents an operation link that connects it to other operations
     """
     
     """
@@ -49,6 +49,13 @@ class ProcessOperationLink(models.Model):
     """
     operation = models.ForeignKey(ProcessOperation)
     link = models.ForeignKey(OperationLink)
+    
+    """
+    Methods
+    """
+    def __unicode__(self):
+        return "%s" % self.operation
+
 
 
 class ProcessOperationParameter(models.Model):

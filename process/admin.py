@@ -59,4 +59,8 @@ class ProcessOperationAdmin(admin.ModelAdmin):
                     ]
     filter_horizontal = []
     list_filter = []
-    inlines = [ProcessOperationInline]
+    inlines = [
+               ProcessOperationLinkInline,
+               ProcessOperationParameterInline,
+               ProcessConnectionInline,
+               ]
