@@ -29,6 +29,13 @@ class Location(models.Model):
                 path.append(temp_parent.name)
                 temp_parent = temp_parent.parent
             return "\\".join(path)
+        
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Location"
+        verbose_name_plural = "Locations"
 
 
 class Link(models.Model):
@@ -56,6 +63,13 @@ class Link(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Link"
+        verbose_name_plural = "Links"
 
 
 class Operation(models.Model):
@@ -75,6 +89,13 @@ class Operation(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Operation"
+        verbose_name_plural = "Operations"
 
 
 class OperationParameter(models.Model):
@@ -95,6 +116,13 @@ class OperationParameter(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Operation Parameter"
+        verbose_name_plural = "Operation Parameters"
 
 
 class OperationLink(models.Model):
@@ -113,3 +141,10 @@ class OperationLink(models.Model):
     """
     def __unicode__(self):
         return self.link.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Operation Link"
+        verbose_name_plural = "Operation Links"

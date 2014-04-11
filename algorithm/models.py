@@ -22,6 +22,13 @@ class AlgorithmType(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Algorithm Type"
+        verbose_name_plural = "Algorithm Types"
 
 
 class ProgrammingLanguage(models.Model):
@@ -39,6 +46,13 @@ class ProgrammingLanguage(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Programming Language"
+        verbose_name_plural = "Programming Languages"
 
 
 class Library(models.Model):
@@ -57,6 +71,13 @@ class Library(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Library"
+        verbose_name_plural = "Libraries"
 
 
 class DataProcess(models.Model):
@@ -76,6 +97,13 @@ class DataProcess(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Data Process"
+        verbose_name_plural = "Data Processes"
 
 
 class Algorithm(models.Model):
@@ -102,6 +130,13 @@ class Algorithm(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Algorithm"
+        verbose_name_plural = "Algorithms"
 
 
 class AlgorithmParameter(models.Model):
@@ -123,6 +158,13 @@ class AlgorithmParameter(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Algorithm Parameter"
+        verbose_name_plural = "Algorithm Parameters"
 
 
 class ParameterValue(models.Model):
@@ -142,6 +184,13 @@ class ParameterValue(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Parameter Value"
+        verbose_name_plural = "Parameter Values"
 
 
 class TrainedModel(models.Model):
@@ -178,6 +227,13 @@ class TrainedModel(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Trained Model"
+        verbose_name_plural = "Trained Models"
 
 
 class TrainedModelParameter(models.Model):
@@ -197,6 +253,13 @@ class TrainedModelParameter(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.parameter.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Trained Model Parameter"
+        verbose_name_plural = "Trained Model Parameters"
 
 
 class TrainedModelFeature(models.Model):
@@ -217,6 +280,13 @@ class TrainedModelFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.parameter.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Trained Model Feature"
+        verbose_name_plural = "Trained Model Features"
 
 class TrainedModelSession(models.Model):
     """
@@ -239,6 +309,13 @@ class TrainedModelSession(models.Model):
     """
     def __unicode__(self):
         return "%s" % (self.start_time)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Trained Model Session"
+        verbose_name_plural = "Trained Model Sessions"
 
 
 class TrainedModelProcess(models.Model):
@@ -266,3 +343,10 @@ class TrainedModelProcess(models.Model):
     """
     def __unicode__(self):
         return self.process.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Trained Model Process"
+        verbose_name_plural = "Trained Model Processes"

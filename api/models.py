@@ -16,3 +16,10 @@ class API(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "API"
+        verbose_name_plural = "APIs"

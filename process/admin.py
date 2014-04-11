@@ -64,3 +64,7 @@ class ProcessOperationAdmin(admin.ModelAdmin):
                ProcessOperationParameterInline,
                ProcessConnectionInline,
                ]
+
+
+admin.site.register(models.Process, ProcessAdmin)
+admin.site.register(models.ProcessOperation, ProcessOperationAdmin)

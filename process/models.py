@@ -18,6 +18,13 @@ class Process(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Process"
+        verbose_name_plural = "Processes"
 
 class ProcessOperation(models.Model):
     """
@@ -37,6 +44,13 @@ class ProcessOperation(models.Model):
     """
     def __unicode__(self):
         return self.process.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Process Operation"
+        verbose_name_plural = "Process Operations"
 
 
 class ProcessOperationLink(models.Model):
@@ -55,6 +69,13 @@ class ProcessOperationLink(models.Model):
     """
     def __unicode__(self):
         return "%s" % self.operation
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Process Operation Link"
+        verbose_name_plural = "Process Operation Links"
 
 
 
@@ -70,6 +91,19 @@ class ProcessOperationParameter(models.Model):
     parameter = models.ForeignKey(OperationParameter)
     value = models.CharField(max_length=200)
     assigned_link = models.ForeignKey(ProcessOperationLink, null=True, blank=True)
+    
+    """
+    Methods
+    """
+    def __unicode__(self):
+        return "%s: %s" % (self.parameter.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Process Operation Parameter"
+        verbose_name_plural = "Process Operation Parameters"
 
 
 class ProcessConnection(models.Model):
@@ -89,3 +123,10 @@ class ProcessConnection(models.Model):
     """
     def __unicode__(self):
         return "FROM:%s - TO:%s" % (self.from_operation.process.name, self.to_operation.process.name)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Process Connection"
+        verbose_name_plural = "Process Connections"
