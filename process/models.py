@@ -65,7 +65,7 @@ class ProcessOperationParameter(models.Model):
     assigned_link = models.ForeignKey(ProcessOperationLink, null=True, blank=True)
 
 
-class ProcessConnections(models.Model):
+class ProcessConnection(models.Model):
     """
     Represents an operation inside a process
     """

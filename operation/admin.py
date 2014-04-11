@@ -5,6 +5,7 @@ class OperationInline(admin.TabularInline):
     model = model = models.Operation
     extra = 0
 
+
 class OperationParameterInline(admin.TabularInline):
     model = model = models.OperationParameter
     extra = 0
