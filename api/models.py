@@ -9,7 +9,7 @@ class API(models.Model):
     """
     Fields
     """
-    name = models.Model(max_length=200)
+    name = models.CharField(max_length=200)
     
     """
     Methods
