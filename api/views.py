@@ -1,3 +1,10 @@
 from django.shortcuts import render
+from django.views.generic.base import View
 
-# Create your views here.
+class ProcessAPI(View):
+    """
+    Processes API requests and return results
+    """
+    
+    """
+    
