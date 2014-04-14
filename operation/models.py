@@ -9,7 +9,7 @@ class Location(models.Model):
     Fields
     """
     name = models.CharField(max_length=200)
-    parent = models.ForeignKey("self")
+    parent = models.ForeignKey("self", null=True, blank=True)
     help = models.TextField(null=True, blank=True)
     
     """
@@ -56,6 +56,7 @@ class Link(models.Model):
     """
     name = models.CharField(max_length=200)
     type = models.CharField(max_length=20, choices=type_options)
+    content_type = models.CharField(max_length=200, default='text/plain')
     optional = models.BooleanField(default=False)
     
     """

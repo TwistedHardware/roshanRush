@@ -2,22 +2,22 @@ from django.contrib import admin
 import models
 
 class ProcessOperationInline(admin.TabularInline):
-    model = model = models.ProcessOperation
+    model = models.ProcessOperation
     extra = 0
 
 
 class ProcessOperationLinkInline(admin.TabularInline):
-    model = model = models.ProcessOperationLink
+    model = models.ProcessOperationLink
     extra = 0
 
 
 class ProcessOperationParameterInline(admin.TabularInline):
-    model = model = models.ProcessOperationParameter
+    model = models.ProcessOperationParameter
     extra = 0
 
 
 class ProcessConnectionInline(admin.TabularInline):
-    model = model = models.ProcessConnection
+    model = models.ProcessConnection
     extra = 0
 
 
@@ -29,15 +29,20 @@ class ProcessAdmin(admin.ModelAdmin):
     fields = [
               'name',
               'api',
+              'api_source',
               ]
     list_display = [
               'name',
               'api',
+              'api_source',
 
                     ]
     filter_horizontal = []
     list_filter = []
-    inlines = [ProcessOperationInline]
+    inlines = [
+               ProcessOperationInline,
+               ProcessConnectionInline
+               ]
     
     
 class ProcessOperationAdmin(admin.ModelAdmin):
@@ -50,19 +55,20 @@ class ProcessOperationAdmin(admin.ModelAdmin):
               'operation',
               'location_x',
               'location_y',
+              'sequence',
               ]
     list_display = [
               'process',
               'operation',
               'location_x',
               'location_y',
+              'sequence',
                     ]
     filter_horizontal = []
-    list_filter = []
+    list_filter = ['process']
     inlines = [
                ProcessOperationLinkInline,
                ProcessOperationParameterInline,
-               ProcessConnectionInline,
                ]
 
 

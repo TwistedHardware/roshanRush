@@ -12,6 +12,7 @@ class Process(models.Model):
     """
     name = models.CharField(max_length=200)
     api = models.ForeignKey(API, null=True, blank=True)
+    api_source = models.ForeignKey("ProcessOperationLink", null=True, blank=True)
     
     """
     Methods
@@ -19,6 +20,50 @@ class Process(models.Model):
     def __unicode__(self):
         return self.name
     
+    def execute_process(self):
+        """
+        Executes a process by running all operations inside
+        """
+        
+        # Run Each Operation
+        output = {}
+        input = {}
+        parameters = {}
+        for operation in self.processoperation_set.all().order_by("sequence"):
+            #Prepare Variables
+            parameters[operation.sequence] = {}
+            output[operation.sequence] = {}
+            input[operation.sequence] = {}
+            
+            # Load input
+            for connection in self.processconnection_set.all().filter(to_operation__operation=operation):
+                output_sequense = connection.from_operation.operation.sequence
+                output_name = connection.from_operation.link.name
+                input[connection.to_operation.link.name] = output[output_sequense][output_name]
+            
+            # Load parameters
+            for parameter in operation.processoperationparameter_set.all():
+                if parameter.assigned_link is None and parameter.assigned_link.link.input_connection_set.all().exists():
+                    parameters[operation.sequence][parameter.assigned_link.link.name] = input[output_sequense][output_name]
+                elif parameter.value is None:
+                    parameters[operation.sequence][parameter.assigned_link.link.name] = eval(parameter.parameter.default_value)
+                else:
+                    parameters[operation.sequence][parameter.assigned_link.link.name] = eval(parameter.value)
+            
+            # Prepare environment
+            i=input[operation.sequence]
+            p=parameters[operation.sequence]
+            o={}
+            
+            # Execute Operation
+            exec operation.operation.operation_code
+            
+            # Store Output
+            output[operation.sequence] = o
+        
+        if not self.api_source is None:
+            return output[self.api_source.operation.sequence][self.api_source.link.link.name], 'text/plain'
+            
     """
     Classes
     """
@@ -38,6 +83,8 @@ class ProcessOperation(models.Model):
     operation = models.ForeignKey(Operation)
     location_x = models.IntegerField()
     location_y = models.IntegerField()
+    sequence = models.IntegerField(default=-1)
+
     
     """
     Methods
@@ -68,7 +115,7 @@ class ProcessOperationLink(models.Model):
     Methods
     """
     def __unicode__(self):
-        return "%s" % self.operation
+        return "%s: %s" % (self.operation, self.link)
     
     """
     Classes
@@ -89,7 +136,7 @@ class ProcessOperationParameter(models.Model):
     """
     operation = models.ForeignKey(ProcessOperation)
     parameter = models.ForeignKey(OperationParameter)
-    value = models.CharField(max_length=200)
+    value = models.CharField(max_length=200, null=True, blank=True)
     assigned_link = models.ForeignKey(ProcessOperationLink, null=True, blank=True)
     
     """
@@ -115,8 +162,8 @@ class ProcessConnection(models.Model):
     Fields
     """
     process = models.ForeignKey(Process)
-    from_operation = models.ForeignKey(OperationLink, related_name="output_connection_set")
-    to_operation = models.ForeignKey(OperationLink, related_name="input_connection_set")
+    from_operation = models.ForeignKey(ProcessOperationLink, related_name="output_connection_set")
+    to_operation = models.ForeignKey(ProcessOperationLink, related_name="input_connection_set")
     
     """
     Methods
