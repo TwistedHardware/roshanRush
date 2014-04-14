@@ -58,8 +58,8 @@ class ProcessOperationAdmin(admin.ModelAdmin):
               'sequence',
               ]
     list_display = [
-              'process',
               'operation',
+              'process',
               'location_x',
               'location_y',
               'sequence',

@@ -90,7 +90,7 @@ class ProcessOperation(models.Model):
     Methods
     """
     def __unicode__(self):
-        return self.process.name
+        return "%s: %s" % (self.process.name, self.operation.name)
     
     """
     Classes
@@ -115,7 +115,7 @@ class ProcessOperationLink(models.Model):
     Methods
     """
     def __unicode__(self):
-        return "%s: %s" % (self.operation, self.link)
+        return "%s: %s" % (self.operation.operation.name, self.link.link.name)
     
     """
     Classes
