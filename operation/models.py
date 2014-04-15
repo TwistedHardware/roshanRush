@@ -111,6 +111,7 @@ class OperationParameter(models.Model):
     name = models.CharField(max_length=200)
     default_value = models.CharField(max_length=200, null=True, blank=True)
     help = models.TextField(null=True, blank=True)
+    assigned_link = models.ForeignKey("OperationLink", null=True, blank=True, default=None)
     
     """
     Methods

@@ -92,6 +92,33 @@ class ProcessOperation(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.process.name, self.operation.name)
     
+    def save(self, *args, **kwargs):
+        """
+        Overrides the default save to create links and parameters of an operator
+        """ 
+        
+        # Check if a new operation is being added
+        if self.pk is None:
+            # Call the default save for the operation
+            super(ProcessOperation, self).save(*args, **kwargs)
+            
+            # Add links
+            for link in self.operation.operationlink_set.all():
+                self.processoperationlink_set.all().create(
+                                                           operation = self,
+                                                           link = link,
+                                                           )
+            
+            # Add links
+            for parameter in self.operation.operationparameter_set.all():
+                self.processoperationparameter_set.all().create(
+                                                                operation=self,
+                                                                parameter=parameter,
+                                                                value=parameter.default_value,
+                                                                assigned_link=self.processoperationlink_set.all().get(link=parameter.assigned_link)
+                                                                )
+        
+    
     """
     Classes
     """
