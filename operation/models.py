@@ -116,7 +116,7 @@ class OperationParameter(models.Model):
     Methods
     """
     def __unicode__(self):
-        return self.name
+        return "%s: %s" % (self.operation.name, self.name)
     
     """
     Classes
@@ -141,7 +141,7 @@ class OperationLink(models.Model):
     Methods
     """
     def __unicode__(self):
-        return self.link.name
+        return "%s: %s" % (self.operation.name, self.link.name)
     
     """
     Classes

@@ -38,17 +38,17 @@ class Process(models.Model):
             # Load input
             for connection in self.processconnection_set.all().filter(to_operation__operation=operation):
                 output_sequense = connection.from_operation.operation.sequence
-                output_name = connection.from_operation.link.name
-                input[connection.to_operation.link.name] = output[output_sequense][output_name]
+                output_name = connection.from_operation.link.link.name
+                input[operation.sequence][connection.to_operation.link.link.name] = output[output_sequense][output_name]
             
             # Load parameters
             for parameter in operation.processoperationparameter_set.all():
-                if parameter.assigned_link is None and parameter.assigned_link.link.input_connection_set.all().exists():
-                    parameters[operation.sequence][parameter.assigned_link.link.name] = input[output_sequense][output_name]
-                elif parameter.value is None:
-                    parameters[operation.sequence][parameter.assigned_link.link.name] = eval(parameter.parameter.default_value)
+                if not parameter.assigned_link is None and parameter.assigned_link.input_connection_set.all().exists():
+                    parameters[operation.sequence][parameter.parameter.name] = input[operation.sequence][parameter.assigned_link.link.link.name]
+                elif parameter.value in [None, ""]:
+                    parameters[operation.sequence][parameter.parameter.name] = eval(parameter.parameter.default_value)
                 else:
-                    parameters[operation.sequence][parameter.assigned_link.link.name] = eval(parameter.value)
+                    parameters[operation.sequence][parameter.parameter.name] = eval(parameter.value)
             
             # Prepare environment
             i=input[operation.sequence]
@@ -169,7 +169,7 @@ class ProcessConnection(models.Model):
     Methods
     """
     def __unicode__(self):
-        return "FROM:%s - TO:%s" % (self.from_operation.process.name, self.to_operation.process.name)
+        return "FROM:%s - TO:%s" % (self.from_operation.operation.operation.name, self.to_operation.operation.operation.name)
     
     """
     Classes
