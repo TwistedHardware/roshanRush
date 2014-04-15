@@ -33,7 +33,7 @@ function openPage(page)
 		},
 		300,
 		"swing"
-		);
+		).show();
 	}
 
 }
@@ -80,7 +80,7 @@ function setLayoutHome(enlargeLogo)
 	},
 	300,
 	"swing"
-	);
+	).hide();
 	
 	
 }
