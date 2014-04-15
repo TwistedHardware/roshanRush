@@ -115,7 +115,7 @@ class ProcessOperation(models.Model):
                                                                 operation=self,
                                                                 parameter=parameter,
                                                                 value=parameter.default_value,
-                                                                assigned_link=self.processoperationlink_set.all().get(link=parameter.assigned_link)
+                                                                assigned_link=self.processoperationlink_set.all().get(link=parameter.assigned_link),
                                                                 )
         
     
