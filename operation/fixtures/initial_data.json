@@ -1,0 +1,36 @@
+[
+ 
+
+{"pk": 1, "model": "operation.location", "fields": {"name": "Data", "parent": null, "help": "Access data sources and destinations"}}, 
+{"pk": 2, "model": "operation.location", "fields": {"name": "Math", "parent": null, "help": "Mathematical operations"}}, 
+{"pk": 1, "model": "operation.link", "fields": {"optional": false, "type": "output", "name": "Output", "content_type": "text/plain"}}, 
+{"pk": 2, "model": "operation.link", "fields": {"optional": true, "type": "input", "name": "Input1", "content_type": "text/plain"}}, 
+{"pk": 3, "model": "operation.link", "fields": {"optional": true, "type": "input", "name": "Input2", "content_type": "text/plain"}}, 
+{"pk": 1, "model": "operation.operation", "fields": {"operation_code": "o['Output'] = \"Hello World!\"", "name": "Hello World!", "location": 1}}, 
+{"pk": 2, "model": "operation.operation", "fields": {"operation_code": "o[\"Output\"] = p[\"X\"] + p[\"Y\"]", "name": "Add", "location": 2}}, 
+{"pk": 3, "model": "operation.operation", "fields": {"operation_code": "o[\"Output\"] = p[\"X\"] - p[\"Y\"]", "name": "Subtract", "location": 2}}, 
+{"pk": 4, "model": "operation.operation", "fields": {"operation_code": "o[\"Output\"] = p[\"X\"] / p[\"Y\"]", "name": "Divide", "location": 2}}, 
+{"pk": 5, "model": "operation.operation", "fields": {"operation_code": "o[\"Output\"] = p[\"X\"] * p[\"Y\"]", "name": "Multiply", "location": 2}}, 
+{"pk": 1, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 2, "name": "X", "assigned_link": 6, "help": "First Number to be added"}}, 
+{"pk": 2, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 2, "name": "Y", "assigned_link": 7, "help": "Second Number to be added"}}, 
+{"pk": 3, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 3, "name": "X", "assigned_link": 4, "help": "The number to be subtracted from."}}, 
+{"pk": 4, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 3, "name": "Y", "assigned_link": 5, "help": "The number to be subtracted."}}, 
+{"pk": 5, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 4, "name": "X", "assigned_link": 9, "help": "The numerator is a mathematical division."}}, 
+{"pk": 6, "model": "operation.operationparameter", "fields": {"default_value": "1", "operation": 4, "name": "Y", "assigned_link": 10, "help": "The denominator is a mathematical division."}}, 
+{"pk": 7, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 5, "name": "X", "assigned_link": 12, "help": "The first number in a multiplication."}}, 
+{"pk": 8, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 5, "name": "Y", "assigned_link": 13, "help": "The second number in a multiplication."}}, 
+{"pk": 1, "model": "operation.operationlink", "fields": {"operation": 1, "link": 1}}, 
+{"pk": 2, "model": "operation.operationlink", "fields": {"operation": 2, "link": 1}}, 
+{"pk": 3, "model": "operation.operationlink", "fields": {"operation": 3, "link": 1}}, 
+{"pk": 4, "model": "operation.operationlink", "fields": {"operation": 3, "link": 2}}, 
+{"pk": 5, "model": "operation.operationlink", "fields": {"operation": 3, "link": 3}}, 
+{"pk": 6, "model": "operation.operationlink", "fields": {"operation": 2, "link": 2}}, 
+{"pk": 7, "model": "operation.operationlink", "fields": {"operation": 2, "link": 3}}, 
+{"pk": 8, "model": "operation.operationlink", "fields": {"operation": 4, "link": 1}}, 
+{"pk": 9, "model": "operation.operationlink", "fields": {"operation": 4, "link": 2}}, 
+{"pk": 10, "model": "operation.operationlink", "fields": {"operation": 4, "link": 3}}, 
+{"pk": 11, "model": "operation.operationlink", "fields": {"operation": 5, "link": 1}}, 
+{"pk": 12, "model": "operation.operationlink", "fields": {"operation": 5, "link": 2}}, 
+{"pk": 13, "model": "operation.operationlink", "fields": {"operation": 5, "link": 3}}
+
+]

@@ -15,6 +15,13 @@ class DataGroup(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Data Group"
+        verbose_name_plural = "Data Groups"
 
 
 class DataSetType(models.Model):
@@ -33,6 +40,13 @@ class DataSetType(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Data Set Type"
+        verbose_name_plural = "Data Set Types"
 
 
 class DataSet(models.Model):
@@ -53,6 +67,13 @@ class DataSet(models.Model):
     def __unicode__(self):
         return self.name
     
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Data Set"
+        verbose_name_plural = "Data Sets"
+    
 
 class FeatureType(models.Model):
     """
@@ -69,6 +90,13 @@ class FeatureType(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Feature Type"
+        verbose_name_plural = "Feature Types"
 
 
 class Feature(models.Model):
@@ -90,6 +118,13 @@ class Feature(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Feature"
+        verbose_name_plural = "Features"
 
 
 class Record(models.Model):
@@ -111,6 +146,13 @@ class Record(models.Model):
     def __unicode__(self):
         return self.name
     
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Record"
+        verbose_name_plural = "Records"
+    
 
 class DateFeature(models.Model):
     """
@@ -129,6 +171,13 @@ class DateFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Date Feature"
+        verbose_name_plural = "Date Features"
     
 
 class NumberFeature(models.Model):
@@ -149,6 +198,13 @@ class NumberFeature(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
     
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Number Feature"
+        verbose_name_plural = "Number Features"
+    
 
 class BooleanFeature(models.Model):
     """
@@ -167,6 +223,13 @@ class BooleanFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Boolean Feature"
+        verbose_name_plural = "Boolean Features"
 
 
 class TextFeature(models.Model):
@@ -186,6 +249,13 @@ class TextFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Text Feature"
+        verbose_name_plural = "Text Features"
 
 
 class ImageFeature(models.Model):
@@ -205,6 +275,13 @@ class ImageFeature(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Image Feature"
+        verbose_name_plural = "Image Features"
 
 
 class RecordLinkFeature(models.Model):
@@ -226,3 +303,9 @@ class RecordLinkFeature(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.feature.name, self.value)
     
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Record Link Feature"
+        verbose_name_plural = "Record Link Features"

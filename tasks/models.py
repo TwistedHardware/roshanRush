@@ -22,6 +22,13 @@ class Worker(models.Model):
     """
     def __unicode__(self):
         return self.ip
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Worker"
+        verbose_name_plural = "Workers"
 
 
 class Task(models.Model):
@@ -63,6 +70,13 @@ class Task(models.Model):
     def parameters_text(self):
         return ", ".join([item.__unicode__() for item in  self.taskparameter_set.all()])
     
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Task"
+        verbose_name_plural = "Tasks"
+    
 
 class TaskParameter(models.Model):
     """
@@ -90,4 +104,11 @@ class TaskParameter(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.name, self.value)
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "Task Parameter"
+        verbose_name_plural = "Task Parameters"
     

@@ -18,6 +18,13 @@ class ImportCSV(models.Model):
     """
     def ___unicode__(self):
         return self.file.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "CSV Import"
+        verbose_name_plural = "CSV Imports"
 
 
 class CSVColumn(models.Model):
@@ -37,3 +44,10 @@ class CSVColumn(models.Model):
     """
     def ___unicode__(self):
         return self.csv_column
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "CSV Column"
+        verbose_name_plural = "CSV Columns"
