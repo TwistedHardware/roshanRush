@@ -115,6 +115,7 @@ a:hover {color: #9f2125; text-decoration: none; }
 	overflow: hidden;
 	z-index:-1;
 	padding-bottom: 57px;
+	display: none;
 }
 
 .footer
