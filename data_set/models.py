@@ -137,7 +137,7 @@ class Record(models.Model):
     """
     data_set = models.ForeignKey(DataSet)
     create_date = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=200, null=True, blank=True, default=str(create_date))
+    name = models.CharField(max_length=200, null=True, blank=True)
     original_id = models.BigIntegerField(null=True, blank=True)
     
     """

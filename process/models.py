@@ -27,31 +27,31 @@ class Process(models.Model):
         
         # Run Each Operation
         output = {}
-        input = {}
+        operation_input = {}
         parameters = {}
         for operation in self.processoperation_set.all().order_by("sequence"):
             #Prepare Variables
             parameters[operation.sequence] = {}
             output[operation.sequence] = {}
-            input[operation.sequence] = {}
+            operation_input[operation.sequence] = {}
             
-            # Load input
+            # Load operation_input
             for connection in self.processconnection_set.all().filter(to_operation__operation=operation):
                 output_sequense = connection.from_operation.operation.sequence
                 output_name = connection.from_operation.link.link.name
-                input[operation.sequence][connection.to_operation.link.link.name] = output[output_sequense][output_name]
+                operation_input[operation.sequence][connection.to_operation.link.link.name] = output[output_sequense][output_name]
             
             # Load parameters
             for parameter in operation.processoperationparameter_set.all():
                 if not parameter.assigned_link is None and parameter.assigned_link.input_connection_set.all().exists():
-                    parameters[operation.sequence][parameter.parameter.name] = input[operation.sequence][parameter.assigned_link.link.link.name]
+                    parameters[operation.sequence][parameter.parameter.name] = operation_input[operation.sequence][parameter.assigned_link.link.link.name]
                 elif parameter.value in [None, ""]:
                     parameters[operation.sequence][parameter.parameter.name] = eval(parameter.parameter.default_value)
                 else:
                     parameters[operation.sequence][parameter.parameter.name] = eval(parameter.value)
             
             # Prepare environment
-            i=input[operation.sequence]
+            i=operation_input[operation.sequence]
             p=parameters[operation.sequence]
             o={}
             
@@ -94,7 +94,7 @@ class ProcessOperation(models.Model):
     
     def save(self, *args, **kwargs):
         """
-        Overrides the default save to create links and parameters of an operator
+        Overrides the default save to create links and parameters of a new operator
         """ 
         
         # Check if a new operation is being added
@@ -102,22 +102,33 @@ class ProcessOperation(models.Model):
             # Call the default save for the operation
             super(ProcessOperation, self).save(*args, **kwargs)
             
-            # Add links
-            for link in self.operation.operationlink_set.all():
-                self.processoperationlink_set.all().create(
-                                                           operation = self,
-                                                           link = link,
-                                                           )
+            # create Link(s) and Parameter(s) for an operation
+            self.prepare_operation()
             
-            # Add links
-            for parameter in self.operation.operationparameter_set.all():
-                self.processoperationparameter_set.all().create(
-                                                                operation=self,
-                                                                parameter=parameter,
-                                                                value=parameter.default_value,
-                                                                assigned_link=self.processoperationlink_set.all().get(link=parameter.assigned_link),
-                                                                )
+        else:
+            # Call the default save for the operation
+            super(ProcessOperation, self).save(*args, **kwargs)
+    
+    def prepare_operation(self):
+        """
+        Creates Link(s) and Parameter(s) for an operation
+        """
         
+        # Add links
+        for link in self.operation.operationlink_set.all():
+            self.processoperationlink_set.all().create(
+                                                        operation = self,
+                                                        link = link,
+                                                        )
+            
+        # Add links
+        for parameter in self.operation.operationparameter_set.all():
+            self.processoperationparameter_set.all().create(
+                                                            operation=self,
+                                                            parameter=parameter,
+                                                            value=parameter.default_value,
+                                                            assigned_link=self.processoperationlink_set.all().get(link=parameter.assigned_link),
+                                                            )
     
     """
     Classes

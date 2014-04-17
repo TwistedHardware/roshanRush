@@ -1,5 +1,6 @@
 from django.contrib import admin
 import models
+import forms
 
 class ProcessOperationInline(admin.TabularInline):
     model = models.ProcessOperation
@@ -16,7 +17,8 @@ class ProcessOperationParameterInline(admin.TabularInline):
     extra = 0
 
 
-class ProcessConnectionInline(admin.TabularInline):
+class ProcessConnectionInline(forms.ProcessConnectionLine):
+    form = forms.ProcessConnectionLineForm
     model = models.ProcessConnection
     extra = 0
 
@@ -25,6 +27,7 @@ class ProcessAdmin(admin.ModelAdmin):
     """
     Manages admin interface for data groups
     """
+    form = forms.ProcessAdminForm
     list_per_page = 100
     fields = [
               'name',

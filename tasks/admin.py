@@ -8,7 +8,7 @@ class TaskInline(admin.TabularInline):
 
 
 class TaskParameterInline(admin.TabularInline):
-    model = model = models.Task
+    model = model = models.TaskParameter
     extra = 0
 
 class WorkerAdmin(admin.ModelAdmin):

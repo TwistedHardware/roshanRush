@@ -1,5 +1,9 @@
+import pandas as pd
+#
 from django.db import models
+#
 from data_set.models import DataSet,BooleanFeature,DateFeature,ImageFeature,NumberFeature,RecordLinkFeature,TextFeature,Feature
+
 
 class ImportCSV(models.Model):
     """
@@ -18,6 +22,37 @@ class ImportCSV(models.Model):
     """
     def ___unicode__(self):
         return self.file.name
+    
+    def save(self, *args, **kwargs):
+        """
+        Overrides the default save to process the uploaded file and create CSVColumn(s) for a new Import
+        """
+        
+        # Check if the ImportCSV is being added
+        if self.pk is None:
+            # Call the default save for the operation
+            super(ImportCSV, self).save(*args, **kwargs)
+            
+            # Create column(s)
+            self.create_columns()
+        else:
+            # Call the default save for the operation
+            super(ImportCSV, self).save(*args, **kwargs)
+            
+    def create_columns(self):
+        """
+        Creates columns for a new CSV Import
+        """
+        # Read the CSV File
+        raw_data = pd.read_csv(self.file, nrows=20)
+        print raw_data.columns
+        
+        # Add CSVColumns
+        for column in raw_data.columns:
+            self.csvcolumn_set.all().create(
+                                            import_csv=self,
+                                            csv_column=column
+                                            )
     
     """
     Classes
