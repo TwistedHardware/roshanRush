@@ -79,18 +79,27 @@ class ProcessOperation(models.Model):
     """
     Fields
     """
+    name = models.CharField(max_length=200, blank=True, default='')
     process = models.ForeignKey(Process)
     operation = models.ForeignKey(Operation)
-    location_x = models.IntegerField()
-    location_y = models.IntegerField()
+    location_x = models.IntegerField(null=True, blank=True)
+    location_y = models.IntegerField(null=True, blank=True)
     sequence = models.IntegerField(default=-1)
-
+    
     
     """
     Methods
     """
     def __unicode__(self):
         return "%s: %s" % (self.process.name, self.operation.name)
+    
+    def get_new_name(self):
+        qs = self.process.processoperation_set.all().filter(operation=self.operation, name__startswith="_%s_" % self.name).order_by("-name")
+        if len(qs)==0:
+            return "_%s_%05d" % (self.operation.name, int(0))
+        else:
+            return "_%s_%05d" % (self.operation.name, qs[0].name[:-5])
+        
     
     def save(self, *args, **kwargs):
         """
@@ -99,6 +108,10 @@ class ProcessOperation(models.Model):
         
         # Check if a new operation is being added
         if self.pk is None:
+            # Check if the operation is manually named
+            if self.name == "":
+                self.name = self.get_new_name()
+            
             # Call the default save for the operation
             super(ProcessOperation, self).save(*args, **kwargs)
             
@@ -155,6 +168,9 @@ class ProcessOperationLink(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.operation.operation.name, self.link.link.name)
     
+    def connected_to(self):
+        return ", ".join([connection for connection in self.processconnection_set.all()])
+    
     """
     Classes
     """
@@ -182,6 +198,12 @@ class ProcessOperationParameter(models.Model):
     """
     def __unicode__(self):
         return "%s: %s" % (self.parameter.name, self.value)
+    
+    def default_value(self):
+        return self.parameter.default_value
+    
+    def help(self):
+        return self.parameter.help
     
     """
     Classes

@@ -1,7 +1,30 @@
 from django import forms
-import models
 from django.contrib import admin
 from django.db.models import Q
+from django.forms.models import BaseInlineFormSet
+#
+import models
+
+
+class ProcessConnectionFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(ProcessConnectionFormSet, self).__init__(*args, **kwargs)
+        #self.queryset = Author.objects.filter(name__startswith='O')
+        
+        
+    @property
+    def empty_form(self, *args, **kwargs):
+        form = self.form(
+                         auto_id=self.auto_id,
+                         prefix=self.add_prefix('__prefix__'),
+                         empty_permitted=True,
+                         process_id=self.instance.id
+                         )
+
+        self.add_fields(form, None)
+
+        return form
+        #super(ProcessConnectionFormSet, self).empty_form(*args, **kwargs)
 
 
 class ProcessAdminForm(forms.ModelForm):
@@ -26,6 +49,12 @@ class ProcessConnectionLine(admin.TabularInline):
         self.can_delete = True
 
 
+class ProcessOperationLine(admin.TabularInline):
+    def __init__(self, *args, **kwargs):
+        super(ProcessOperationLine, self).__init__(*args, **kwargs)
+        self.can_delete = True
+
+
 class ProcessConnectionLineForm(forms.ModelForm):
     """
     Represents a form for a Process Connection In-line in admin interface
@@ -34,31 +63,34 @@ class ProcessConnectionLineForm(forms.ModelForm):
         model = models.ProcessConnection
 
     def __init__(self, *args, **kwargs):
+        process_id = kwargs.get('process_id',0)
+        try:
+            del kwargs['process_id']
+        except:
+            pass
         super(ProcessConnectionLineForm, self).__init__(*args, **kwargs)
-        
+
         if self.instance.id:
-            
             qs_from = models.ProcessOperationLink.objects.all().filter(
                                                                   operation__process__id=self.instance.process.id,
-                                                                  link__link__type="output"
+                                                                  link__link__type="output",
                                                                   )
             
             qs_to = models.ProcessOperationLink.objects.all().filter(
                                                                   operation__process__id=self.instance.process.id,
-                                                                  link__link__type="input"
+                                                                  link__link__type="input",
                                                                   )
             self.fields['from_operation'].queryset = qs_from
             self.fields['to_operation'].queryset = qs_to
         else:
-            # print self
             qs_from = models.ProcessOperationLink.objects.all().filter(
-                                                                  #operation__process__id=self.instance.process.id,
-                                                                  link__link__type="output"
+                                                                  operation__process__id=process_id,
+                                                                  link__link__type="output",
                                                                   )
             
             qs_to = models.ProcessOperationLink.objects.all().filter(
-                                                                  #operation__process__id=self.instance.process.id,
-                                                                  link__link__type="input"
+                                                                  operation__process__id=process_id,
+                                                                  link__link__type="input",
                                                                   )
             self.fields['from_operation'].queryset = qs_from
             self.fields['to_operation'].queryset = qs_to
