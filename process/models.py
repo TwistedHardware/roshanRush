@@ -93,6 +93,9 @@ class ProcessOperation(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.process.name, self.operation.name)
     
+    def get_parameters(self):
+        return ", ".join(["%s:%s" % (parameter.name, parameter.value) for parameter in self.processoperationparameter_set.all()])
+    
     def get_new_name(self):
         qs = self.process.processoperation_set.all().filter(operation=self.operation, name__startswith="_%s_" % self.name).order_by("-name")
         if len(qs)==0:

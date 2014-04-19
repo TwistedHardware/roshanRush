@@ -1,19 +1,22 @@
 from django import forms
 from django.contrib import admin
-from django.db.models import Q
 from django.forms.models import BaseInlineFormSet
 #
 import models
 
 
 class ProcessConnectionFormSet(BaseInlineFormSet):
+    """
+    Represents an In-line FormSet for a connection in a Process Form
+    """ 
     def __init__(self, *args, **kwargs):
         super(ProcessConnectionFormSet, self).__init__(*args, **kwargs)
-        #self.queryset = Author.objects.filter(name__startswith='O')
         
         
     @property
     def empty_form(self, *args, **kwargs):
+        #super(ProcessConnectionFormSet, self).empty_form(*args, **kwargs)
+        # Add process_id to Form __init__ method in kwargs 
         form = self.form(
                          auto_id=self.auto_id,
                          prefix=self.add_prefix('__prefix__'),
@@ -24,7 +27,7 @@ class ProcessConnectionFormSet(BaseInlineFormSet):
         self.add_fields(form, None)
 
         return form
-        #super(ProcessConnectionFormSet, self).empty_form(*args, **kwargs)
+        
 
 
 class ProcessAdminForm(forms.ModelForm):
