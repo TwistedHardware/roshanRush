@@ -3,7 +3,8 @@ apt-get -y install python-dev python-mysqldb
 apt-get -y install git
 apt-get -y install python-pip
 apt-get -y install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
-pip install Django django-admin-tools south
+pip install Django south
+easy_install -Z django-admin-tools
 pip install numpy scipy pandas sympy matplotlib ipython ipython-notebook nose scikit-learn --upgrade
 pip install cython scikit-image
 git clone https://github.com/TwistedHardware/roshanRush ~/roshan --depth 1
