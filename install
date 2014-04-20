@@ -10,4 +10,4 @@ git clone https://github.com/TwistedHardware/roshanRush ~/roshan --depth 1
 cd roshan
 python manage.py syncdb
 python manage.py migrate
-python manage.py runserver 0.0.0.0:8080
+python manage.py runserver 0.0.0.0:80
