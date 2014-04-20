@@ -1,5 +1,8 @@
 from django.contrib import admin
+#
 import models
+import forms
+
 
 class OperationInline(admin.TabularInline):
     model = model = models.Operation
@@ -7,6 +10,8 @@ class OperationInline(admin.TabularInline):
 
 
 class OperationParameterInline(admin.TabularInline):
+    formset = forms.OperationParameterFormSet
+    form = forms.OperationParameterForm
     model = model = models.OperationParameter
     extra = 0
 
@@ -73,7 +78,7 @@ class OperationAdmin(admin.ModelAdmin):
               'operation_code',
                     ]
     filter_horizontal = []
-    list_filter = []
+    list_filter = ['location']
     inlines = [OperationLinkInline, OperationParameterInline]
 
 

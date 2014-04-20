@@ -17,8 +17,8 @@ class TextFeatureInline(admin.TabularInline):
     extra = 0
     
 
-class ImageFeatureInline(admin.TabularInline):
-    model = model = models.ImageFeature
+class FileFeatureInline(admin.TabularInline):
+    model = model = models.FileFeature
     extra = 0
     
 
@@ -109,12 +109,14 @@ class FeatureTypeAdmin(admin.ModelAdmin):
     list_per_page = 100
     fields = [
               'name',
+              'feature_type',
               ]
     list_display = [
                     'name',
+                    'feature_type',
                     ]
     filter_horizontal = []
-    list_filter = []
+    list_filter = ['feature_type']
     inlines = [FeatureInline]
 
 
@@ -147,7 +149,6 @@ class RecordAdmin(admin.ModelAdmin):
     """
     list_per_page = 100
     fields = [
-              'create_date',
               'name',
               'data_set',
               'original_id',
@@ -164,10 +165,9 @@ class RecordAdmin(admin.ModelAdmin):
                NumberFeatureInline,
                DateFeatureInline,
                TextFeatureInline,
-               ImageFeatureInline,
+               FileFeatureInline,
                RecordLinkFeatureInline,
                BooleanFeatureInline,
-               
                ]
 
 

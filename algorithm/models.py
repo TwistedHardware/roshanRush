@@ -147,6 +147,7 @@ class AlgorithmParameter(models.Model):
     """
     Fields
     """
+    algorithm = models.ForeignKey(Algorithm)
     name = models.CharField(max_length=200)
     default_value = models.CharField(max_length=200)
     help = models.CharField(max_length=200, null=True, blank=True)
