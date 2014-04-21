@@ -9,6 +9,6 @@ pip install numpy scipy pandas sympy matplotlib ipython ipython-notebook nose sc
 pip install cython scikit-image
 git clone https://github.com/TwistedHardware/roshanRush ~/roshan --depth 1
 cd roshan
-python manage.py syncdb
+python manage.py syncdb --noinput
 python manage.py migrate
 python manage.py runserver 0.0.0.0:80
