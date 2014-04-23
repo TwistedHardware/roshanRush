@@ -35,7 +35,7 @@
 {"pk": 9, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 6, "name": "X", "assigned_link": 15, "help": "The base of the exponentiation."}},
 {"pk": 10, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 6, "name": "Y", "assigned_link": 16, "help": "The power of the exponentiation."}},
 {"pk": 11, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 7, "name": "csv_id", "assigned_link": 18, "help": "The ID of an Import CSV object."}},
-{"pk": 12, "model": "operation.operationparameter", "fields": {"default_value": "%Y%m%d", "operation": 7, "name": "date_format", "assigned_link": 19, "help": "The format of date and time"}},
+{"pk": 12, "model": "operation.operationparameter", "fields": {"default_value": "\"%Y%m%d\"", "operation": 7, "name": "date_format", "assigned_link": 19, "help": "The format of date and time"}},
 {"pk": 13, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 8, "name": "data_set_id", "assigned_link": 21, "help": "The ID of the Dataset to load."}},
 {"pk": 14, "model": "operation.operationparameter", "fields": {"default_value": "\"feature\"", "operation": 17, "name": "feature_name", "assigned_link": 40, "help": "Feature name."}},
 {"pk": 15, "model": "operation.operationparameter", "fields": {"default_value": "\"__exact\"", "operation": 17, "name": "comparison_operator", "assigned_link": 41, "help": "You can you:\r\n__extact : Equals a single value\r\n__in : Equals any value in a list\r\n__gte: Greater than or equal to\r\n__gt: Greater than\r\n__lte: Less than or equal to\r\n__lt: Less than\r\nSpecial for date features:\r\n__year\r\n__month\r\n__day"}},
