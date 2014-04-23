@@ -176,7 +176,10 @@ class ProcessOperationLink(models.Model):
         return "%s: %s" % (self.operation.operation.name, self.link.link.name)
     
     def connected_to(self):
-        return ", ".join([connection for connection in self.processconnection_set.all()])
+        if self.link.link.type == "input":
+            return ", ".join([connection.__unicode__() for connection in self.input_connection_set.all()])
+        else:
+            return ", ".join([connection.__unicode__() for connection in self.output_connection_set.all()])
     
     """
     Classes
