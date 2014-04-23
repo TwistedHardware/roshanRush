@@ -24,6 +24,7 @@
 {"pk": 16, "model": "operation.operation", "fields": {"operation_code": "i[\"Input1\"].delete()", "name": "Delete", "location": 1}},
 {"pk": 17, "model": "operation.operation", "fields": {"operation_code": "qs_filter ={\"feature__name\": p[\"feature_name\"], \"value%s\" % p[\"comparison_operator\"]: p[\"value\"]}\r\no[\"Output\"] = i[\"Input1\"].filter(**qs_filter)", "name": "Filter Features by Value", "location": 1}},
 {"pk": 18, "model": "operation.operation", "fields": {"operation_code": "from data_set.models import Record\r\nid_list = [id[0] for id in list(set(i[\"Input1\"].values_list(\"record__id\")))]\r\no[\"Output\"] = Record.objects.all().filter(id__in=id_list)", "name": "Get Record from Features", "location": 1}},
+{"pk": 19, "model": "operation.operation", "fields": {"operation_code": "import pandas as pd\r\ndf=pd.DataFrame.from_records(i[\"Input1\"].values(\"record_id\",\"feature__name\",\"value\"))\r\no[\"Output\"]=df.pivot(index=\"record_id\", columns=\"feature__name\", values=\"value\")", "name": "Features to DataFrame", "location": 1}},
 {"pk": 1, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 2, "name": "X", "assigned_link": 6, "help": "First Number to be added"}},
 {"pk": 2, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 2, "name": "Y", "assigned_link": 7, "help": "Second Number to be added"}},
 {"pk": 3, "model": "operation.operationparameter", "fields": {"default_value": "0", "operation": 3, "name": "X", "assigned_link": 4, "help": "The number to be subtracted from."}},
@@ -82,4 +83,6 @@
 {"pk": 40, "model": "operation.operationlink", "fields": {"operation": 17, "link": 3}},
 {"pk": 41, "model": "operation.operationlink", "fields": {"operation": 17, "link": 4}},
 {"pk": 42, "model": "operation.operationlink", "fields": {"operation": 17, "link": 5}},
-{"pk": 43, "model": "operation.operationlink", "fields": {"operation": 18, "link": 2}}]
+{"pk": 43, "model": "operation.operationlink", "fields": {"operation": 18, "link": 2}},
+{"pk": 44, "model": "operation.operationlink", "fields": {"operation": 19, "link": 1}},
+{"pk": 45, "model": "operation.operationlink", "fields": {"operation": 19, "link": 2}}]
