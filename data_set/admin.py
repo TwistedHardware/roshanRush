@@ -160,7 +160,9 @@ class RecordAdmin(admin.ModelAdmin):
               'original_id',
                     ]
     filter_horizontal = []
-    list_filter = []
+    list_filter = [
+                   'data_set',
+                   ]
     inlines = [
                NumberFeatureInline,
                DateFeatureInline,

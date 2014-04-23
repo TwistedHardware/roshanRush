@@ -37,12 +37,14 @@ class Process(models.Model):
             
             # Load operation_input
             for connection in self.processconnection_set.all().filter(to_operation__operation=operation):
+                print connection
                 output_sequense = connection.from_operation.operation.sequence
                 output_name = connection.from_operation.link.link.name
                 operation_input[operation.sequence][connection.to_operation.link.link.name] = output[output_sequense][output_name]
             
             # Load parameters
             for parameter in operation.processoperationparameter_set.all():
+                print parameter
                 if not parameter.assigned_link is None and parameter.assigned_link.input_connection_set.all().exists():
                     parameters[operation.sequence][parameter.parameter.name] = operation_input[operation.sequence][parameter.assigned_link.link.link.name]
                 elif parameter.value in [None, ""]:
@@ -56,7 +58,9 @@ class Process(models.Model):
             o={}
             
             # Execute Operation
+            print p
             exec operation.operation.operation_code
+            print "F"
             
             # Store Output
             output[operation.sequence] = o

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 class DataGroup(models.Model):
@@ -158,7 +159,51 @@ class Record(models.Model):
     Methods
     """
     def __unicode__(self):
-        return self.name
+        return "%s" % self.create_date
+    
+    def feature(self, feature, value=None, date_format="%Y%m%d"):
+        """
+        Sets or get the value of a feature
+        """
+        # Check the faeture_type
+        if feature.type.feature_type == "date":
+            value = datetime.strptime(str(value), date_format)
+            record_feature = self.datefeature_set.all().get(
+                                                record=self,
+                                                feature=feature,
+                                                )
+        elif feature.type.feature_type == "number":
+            record_feature = self.numberfeature_set.all().get(
+                                                record=self,
+                                                feature=feature,
+                                                )
+        elif feature.type.feature_type == "boolean":
+            record_feature =  self.booleanfeature_set.all().get(
+                                                record=self,
+                                                feature=feature,
+                                                )
+        elif feature.type.feature_type == "text":
+            record_feature =  self.textfeature_set.all().get(
+                                              record=self,
+                                              feature=feature,
+                                              )
+        elif feature.type.feature_type == "file":
+            record_feature =  self.textfeature_set.all().get(
+                                              record=self,
+                                              feature=feature,
+                                              )
+        elif feature.type.feature_type == "relation":
+            record_feature =  self.recordlinkfeature_set.all().get(
+                                                record=self,
+                                                feature=feature,
+                                                )
+        
+        # Check if a value is set
+        if not value is None:
+            record_feature.value = value
+            record_feature.save()
+        
+        return record_feature
     
     def save(self, *args, **kwargs):
         """
