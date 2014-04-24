@@ -64,7 +64,7 @@ class ImportCSV(models.Model):
 
 class CSVColumn(models.Model):
     """
-    Represents a record of importing data from CSV file
+    Represents a CSV file column and mapping to a feature
     """
     
     """
@@ -86,3 +86,53 @@ class CSVColumn(models.Model):
     class Meta:
         verbose_name = "CSV Column"
         verbose_name_plural = "CSV Columns"
+
+
+class ImportDICOM(models.Model):
+    """
+    Represents a record of importing a DICOM Sequence
+    """
+    
+    """
+    Fields
+    """
+    create_time = models.DateTimeField(auto_now_add=True)
+    data_set = models.ForeignKey(DataSet, null=True, blank=True)
+    
+    """
+    Methods
+    """
+    def ___unicode__(self):
+        return self.file.name
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "DICOM Import"
+        verbose_name_plural = "DICOM Imports"
+
+
+class DICOMFile(models.Model):
+    """
+    Represents a single DICOM File
+    """
+    
+    """
+    Fields
+    """
+    import_dicom = models.ForeignKey(ImportDICOM)
+    file = models.FileField(upload_to="DICOM")
+    
+    """
+    Methods
+    """
+    def ___unicode__(self):
+        return self.csv_column
+    
+    """
+    Classes
+    """
+    class Meta:
+        verbose_name = "DICOM File"
+        verbose_name_plural = "DICOM Files"

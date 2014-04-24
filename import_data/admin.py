@@ -7,6 +7,11 @@ class CSVColumnInline(admin.TabularInline):
     extra = 0
 
 
+class DICOMFileInline(admin.TabularInline):
+    model = model = models.DICOMFile
+    extra = 0
+
+
 class ImportCSVAdmin(admin.ModelAdmin):
     """
     Manages admin interface for Import CSV
@@ -25,4 +30,21 @@ class ImportCSVAdmin(admin.ModelAdmin):
     inlines = [CSVColumnInline]
 
 
+class ImportDICOMAdmin(admin.ModelAdmin):
+    """
+    Manages admin interface for Import DICOM
+    """
+    list_per_page = 100
+    fields = [
+              'data_set',
+              ]
+    list_display = [
+              'data_set',
+                    ]
+    filter_horizontal = []
+    list_filter = []
+    inlines = [DICOMFileInline]
+
+
 admin.site.register(models.ImportCSV, ImportCSVAdmin)
+admin.site.register(models.ImportDICOM, ImportDICOMAdmin)
