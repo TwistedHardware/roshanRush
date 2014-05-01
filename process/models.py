@@ -20,7 +20,7 @@ class Process(models.Model):
     def __unicode__(self):
         return self.name
     
-    def execute_process(self):
+    def execute_process(self, *args, **kwargs):
         """
         Executes a process by running all operations inside
         """
@@ -37,16 +37,31 @@ class Process(models.Model):
             
             # Load operation_input
             for connection in self.processconnection_set.all().filter(to_operation__operation=operation):
-                print connection
                 output_sequense = connection.from_operation.operation.sequence
                 output_name = connection.from_operation.link.link.name
                 operation_input[operation.sequence][connection.to_operation.link.link.name] = output[output_sequense][output_name]
             
             # Load parameters
+            print "1"
+            print kwargs["api_parameters"]
+            print "2"
             for parameter in operation.processoperationparameter_set.all():
-                print parameter
+                api_parameter = kwargs["api_parameters"].get("%s__%s__int" % (operation.sequence, parameter.parameter.name), None)
+                if not api_parameter is None:
+                    api_parameter = int(api_parameter)
+                else:
+                    api_parameter = kwargs["api_parameters"].get("%s__%s__float" % (operation.sequence, parameter.parameter.name), None)
+                    if not api_parameter is None:
+                        api_parameter = float(api_parameter)
+                    else:
+                        api_parameter = kwargs["api_parameters"].get("%s__%s__string" % (operation.sequence, parameter.parameter.name), None)
+                        if not api_parameter is None:
+                            api_parameter = str(api_parameter)
+                print api_parameter
                 if not parameter.assigned_link is None and parameter.assigned_link.input_connection_set.all().exists():
                     parameters[operation.sequence][parameter.parameter.name] = operation_input[operation.sequence][parameter.assigned_link.link.link.name]
+                elif not api_parameter is None:
+                    parameters[operation.sequence][parameter.parameter.name] = api_parameter
                 elif parameter.value in [None, ""]:
                     parameters[operation.sequence][parameter.parameter.name] = eval(parameter.parameter.default_value)
                 else:
@@ -58,9 +73,7 @@ class Process(models.Model):
             o={}
             
             # Execute Operation
-            print p
             exec operation.operation.operation_code
-            print "F"
             
             # Store Output
             output[operation.sequence] = o
@@ -225,7 +238,7 @@ class ProcessOperationParameter(models.Model):
 
 class ProcessConnection(models.Model):
     """
-    Represents an operation inside a process
+    Represents an connection between two operations
     """
     
     """

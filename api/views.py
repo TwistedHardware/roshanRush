@@ -49,7 +49,7 @@ class ProcessAPI(View):
         try:
             api_model = API.objects.all().get(name=api_name)
         except:
-            return HttpResponse("API (%s): Doesn't exist. " % api_name, content_type='text/plain')
+            return HttpResponse("API (%s): Doesn't exist." % api_name, content_type='text/plain')
         
         # Record API Usage
         api_usage = api_model.apiusage_set.all().create(api=api_model)
@@ -92,7 +92,10 @@ class ProcessAPI(View):
         
         # TODO: Execute linked process and return the results
         if api_model.process_set.all().exists():
-            output, content_type = api_model.process_set.all()[0].execute_process()
+            print args
+            print kwargs
+            print "e"
+            output, content_type = api_model.process_set.all()[0].execute_process(api_parameters=request.REQUEST)
             return HttpResponse(output, content_type)
         # Return HTTPResponse
         return HttpResponse("No process is linked to this API", content_type='text/plain')

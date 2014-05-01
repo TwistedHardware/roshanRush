@@ -111,4 +111,3 @@ class TaskParameter(models.Model):
     class Meta:
         verbose_name = "Task Parameter"
         verbose_name_plural = "Task Parameters"
-    
