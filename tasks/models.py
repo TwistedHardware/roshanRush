@@ -3,7 +3,7 @@ from django.db import models
 
 class Worker(models.Model):
     """
-    Represents a task that the system executes
+    Represents a computer that executes tasks
     """
     
     """

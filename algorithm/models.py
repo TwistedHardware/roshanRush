@@ -33,7 +33,7 @@ class AlgorithmType(models.Model):
 
 class ProgrammingLanguage(models.Model):
     """
-    Represents a type of Machine Learning Algorithms
+    Represents a programming language
     """
     
     """
@@ -82,7 +82,7 @@ class Library(models.Model):
 
 class DataProcess(models.Model):
     """
-    Represents a type of records
+    Represents a process that can be implemented on data
     """
     
     """
@@ -108,7 +108,7 @@ class DataProcess(models.Model):
 
 class Algorithm(models.Model):
     """
-    Represents a type of records
+    Represents an algorithms from a library
     """
     
     """
@@ -141,7 +141,7 @@ class Algorithm(models.Model):
 
 class AlgorithmParameter(models.Model):
     """
-    Represents a type of records
+    Represents a parameter from an algorithm
     """
     
     """
@@ -170,7 +170,7 @@ class AlgorithmParameter(models.Model):
 
 class ParameterValue(models.Model):
     """
-    Represents a type of records
+    Represents a possible value for a parameters
     """
     
     """
@@ -291,7 +291,7 @@ class TrainedModelFeature(models.Model):
 
 class TrainedModelSession(models.Model):
     """
-    Represents a feature for a trained model
+    Represents a session for a trained model
     """
     
     """

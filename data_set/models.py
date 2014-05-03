@@ -3,7 +3,7 @@ from django.db import models
 
 class DataGroup(models.Model):
     """
-    Represents a type of records
+    Represents a group an Data Sets
     """
     
     """
@@ -27,7 +27,7 @@ class DataGroup(models.Model):
 
 class DataSetType(models.Model):
     """
-    Represents a type of records
+    Represents a schema for a Data Set
     """
     
     """
@@ -52,7 +52,7 @@ class DataSetType(models.Model):
 
 class DataSet(models.Model):
     """
-    Represents a type of records
+    Represents a Data Set which is basically a table of data that has the same schema
     """
     
     """
@@ -78,7 +78,7 @@ class DataSet(models.Model):
 
 class FeatureType(models.Model):
     """
-    Represents a type of records
+    Represents a type of features
     """
     
     """
@@ -115,7 +115,7 @@ class FeatureType(models.Model):
 
 class Feature(models.Model):
     """
-    Represents a type of records
+    Represents a feature which is basically a column in a Data Set
     """
     
     """
@@ -144,7 +144,7 @@ class Feature(models.Model):
 
 class Record(models.Model):
     """
-    Represents a type of records
+    Represents a record in a Data Set
     """
     
     """
@@ -259,7 +259,7 @@ class Record(models.Model):
 
 class DateFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type Date
     """
     
     """
@@ -285,7 +285,7 @@ class DateFeature(models.Model):
 
 class NumberFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type Number
     """
     
     """
@@ -311,7 +311,7 @@ class NumberFeature(models.Model):
 
 class BooleanFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type Boolean
     """
     
     """
@@ -337,7 +337,7 @@ class BooleanFeature(models.Model):
 
 class TextFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type Text
     """
     
     """
@@ -363,7 +363,7 @@ class TextFeature(models.Model):
 
 class FileFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type File
     """
     
     """
@@ -389,7 +389,7 @@ class FileFeature(models.Model):
 
 class RecordLinkFeature(models.Model):
     """
-    Represents a type of records
+    Represents a Feature of type Record Link which links one Data Set
     """
     
     """
