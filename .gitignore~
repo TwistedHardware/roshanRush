@@ -55,6 +55,3 @@ docs/_build/
 # DICOM and CSV Files
 *.dcm
 *.csv
-
-# Pickle Files
-*.pkl
