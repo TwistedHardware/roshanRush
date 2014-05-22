@@ -150,7 +150,7 @@ class AlgorithmParameter(models.Model):
     algorithm = models.ForeignKey(Algorithm)
     name = models.CharField(max_length=200)
     default_value = models.CharField(max_length=200)
-    help = models.CharField(max_length=200, null=True, blank=True)
+    help = models.TextField(null=True, blank=True)
     min_value = models.FloatField(null=True, blank=True)
     max_value = models.FloatField(null=True, blank=True)
     
