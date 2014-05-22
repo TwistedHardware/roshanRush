@@ -184,7 +184,7 @@ class ParameterValue(models.Model):
     Methods
     """
     def __unicode__(self):
-        return self.name
+        return "%s:%s" % (self.parameter.name, self.value)
     
     """
     Classes
@@ -199,10 +199,10 @@ class TrainedModel(models.Model):
     Represents a trained model
     """
     status_options = (
-                      ('not-ready','Not Ready'),
-                      ('training','Training'),
-                      ('ready','Ready'),
-                      ('failed','Failed'),
+                      ("not-ready","Not Ready"),
+                      ("training","Training"),
+                      ("ready","Ready"),
+                      ("failed","Failed"),
                       )
     
     """
