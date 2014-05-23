@@ -214,7 +214,8 @@ class TrainedModel(models.Model):
     accumulative_training = models.BooleanField(default=False)
     result = models.ForeignKey(Feature, null=True, blank=True)
     result_offest = models.IntegerField(default=1)
-    status = models.CharField(max_length=20, choices=status_options)
+    training_percentage = models.FloatField(default=0.5)
+    status = models.CharField(max_length=20, choices=status_options, default="not-ready")
     import_code = models.TextField(null=True, blank=True)
     feature_loader = models.TextField(null=True, blank=True)
     feature_preparation = models.TextField(null=True, blank=True)
@@ -228,6 +229,105 @@ class TrainedModel(models.Model):
     """
     def __unicode__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        """
+        Overrides the default save method to add parameters to the model and prepare code
+        """
+        # Check if it is a new model
+        if self.pk is None:
+            # Add codes to the model
+            self.reset_code()
+            
+            # Call parent save
+            super(TrainedModel, self).save(*args, **kwargs)
+            
+            # Add parameters
+            self.reset_parameters()
+        else:
+            # Check if algorithm is changed
+            old_instance = TrainedModel.objects.get(pk=self.pk)
+            if old_instance.algorithm <> self.algorithm:
+                self.reset_parameters()
+                self.reset_code()
+            
+            # Call parent save
+            super(TrainedModel, self).save(*args, **kwargs)
+    
+    def reset_parameters(self):
+        """
+        Deletes and recreates parameters
+        """
+        # Delete all parameters
+        self.trainedmodelparameter_set.all().delete()
+        
+        # Add parameter to trained model and assign default values to them 
+        for parameter in self.algorithm.algorithmparameter_set.all():
+            self.trainedmodelparameter_set.all().create(
+                                                        parameter=parameter,
+                                                        trained_model=self,
+                                                        value=parameter.default_value,
+                                                        )
+    
+    def reset_code(self):
+        """
+        Resets the code the the original code in the algorithm
+        """
+        self.import_code = self.algorithm.import_code
+        self.feature_loader = self.algorithm.feature_loader
+        self.feature_preparation = self.algorithm.feature_preparation
+        self.result_preparation = self.algorithm.result_preparation
+        self.training = self.algorithm.training
+        self.prediction = self.algorithm.prediction
+        self.test_accuracy = self.algorithm.test_accuracy
+    
+    def prepare_import_code(self):
+        """
+        Returns code to import required libraries
+        """
+        return self.import_code
+    
+    def prepare_feature_loader(self, dataset="dataset"):
+        """
+        Returns code to load Features
+        """
+        return self.feature_loader.format(dataset=dataset, training_percentage=self.training_percentage)
+    
+    def prepare_feature_preparation(self):
+        """
+        Returns code to prepare features
+        """
+        return self.feature_loader.format(feature_set=",".join(self.trainedmodelfeature_set.all().values("feature__name")))
+    
+    def prepare_result_preparation(self):
+        """
+        Returns code to prepare results
+        """
+        return self.result_preparation.format(result=self.result.name)
+    
+    def prepare_training(self):
+        """
+        Returns code to train a model
+        """
+        return self.training.format(parameters=",".join(["=".join(item) for item in self.trainedmodelparameter_set.all().values("parameter__name", "value")]))
+    
+    def prepare_prediction(self):
+        """
+        Returns code to predict using this model
+        """
+        return self.prediction
+    
+    def prepare_test_accuracy(self):
+        """
+        Returns code to test accuracy of this model
+        """
+        return self.test_accuracy
+    
+    def train_model(self):
+        """
+        Trains a model
+        """
+        pass
     
     """
     Classes
