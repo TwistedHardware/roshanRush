@@ -1,8 +1,26 @@
+import sys
+import StringIO
+import contextlib
 import pandas as pd
+import datetime
+from sklearn.externals import joblib
 #
 from django.db import models
+from django.utils.timezone import utc
+from django.conf import settings
 #
 from data_set.models import DataSet, Record, Feature, DateFeature, NumberFeature, BooleanFeature, TextFeature, FileFeature, RecordLinkFeature
+
+
+@contextlib.contextmanager
+def stdoutIO(stdout=None):
+    old = sys.stdout
+    if stdout is None:
+        stdout = StringIO.StringIO()
+    sys.stdout = stdout
+    yield stdout
+    sys.stdout = old
+
 
 class AlgorithmType(models.Model):
     """
@@ -355,25 +373,25 @@ class TrainedModel(models.Model):
         else:
             numerical_df = pd.DataFrame()
         
-        # Process number features
+        # Process boolean features
         if len(boolean_features) <> 0:
             boolean_df = pd.DataFrame(boolean_features).pivot(index="record__id", columns="feature__name", values="value")
         else:
             boolean_df = pd.DataFrame()
         
-        # Process number features
+        # Process text features
         if len(text_features) <> 0:
             text_df = pd.DataFrame(text_features).pivot(index="record__id", columns="feature__name", values="value")
         else:
             text_df = pd.DataFrame()
         
-        # Process number features
+        # Process file features
         if len(file_features) <> 0:
             file_df = pd.DataFrame(file_features).pivot(index="record__id", columns="feature__name", values="value")
         else:
             file_df = pd.DataFrame()
         
-        # Process number features
+        # Process record link features
         if len(record_link_features) <> 0:
             record_link_df = pd.DataFrame(record_link_features).pivot(index="record__id", columns="feature__name", values="value")
         else:
@@ -382,11 +400,100 @@ class TrainedModel(models.Model):
         # Concatenate all features DataFrames to the Main IDs DataFrame and return it
         return pd.concat([dataset, date_df, numerical_df, boolean_df, text_df, file_df, record_link_df], axis=1)
     
+    def execute_code(self, dataset, exec_import_code=True, exec_feature_loader=True, exec_feature_preparation=True, exec_result_preparation=True,
+                     exec_training=True, exec_prediction=True, prepare_test_accuracy=True):
+        """
+        Executes model's code and returns (error_text, output, trained_model, prediction, accuracy)
+        dataset should be a pandas DataFrame
+        """
+        # Define trained_model, prediction, accuracy
+        trained_model = None
+        prediction =None
+        accuracy = None
+        error_text = None
+        
+        
+        # Try to executes all requested code
+        try:
+            with stdoutIO() as s:
+                if exec_import_code:
+                    exec self.prepare_import_code()
+                
+                if exec_feature_loader:
+                    exec self.prepare_feature_loader()
+                
+                if exec_feature_preparation:
+                    exec self.prepare_feature_preparation()
+                
+                if exec_result_preparation:
+                    exec self.prepare_result_preparation()
+                
+                if exec_training:
+                    exec self.prepare_training()
+                
+                if exec_prediction:
+                    exec self.prepare_prediction()
+                
+                if prepare_test_accuracy:
+                    exec self.prepare_test_accuracy()
+            
+            # Retrieve the output of code executed
+            output=s.getvalue()
+        except Exception as ex:
+            try:
+                error_text = ex.strerror
+            except:
+                error_text = str(ex)
+        
+        # Returns error_text, output, trained_model, prediction, accuracy
+        # if error_text is not None then an error happened during code execution
+        return (error_text, output, trained_model, prediction, accuracy)
+    
     def train_model(self):
         """
-        Trains a model
+        Trains model and stored the trained model pickle file
+        Returns predictions of test_set
         """
-        pass
+        # Create a Session
+        session = self.trainedmodelsession_set.all().create(
+                                                  trained_model = self,
+                                                  parameters = "\n".join(["=".join(item) for item in self.trainedmodelparameter_set.all().values_list("parameter__name", "value")]),
+                                                  features = "\n".join(["%s" % item[0]  for item in self.trainedmodelfeature_set.all().values_list("feature__name")]),
+                                                  start_time = datetime.datetime.utcnow().replace(tzinfo=utc),
+                                                  finish_time = None,
+                                                  output = None,
+                                                  accuracy_score = None,
+                                                  accuracy_report = None
+                                                  )
+        # Load dataset
+        dataset = self.load_dataset()
+        
+        # Execute all code
+        error_text, output, trained_model, prediction, accuracy = self.execute_code(dataset)
+        
+        # Check for error
+        if error_text in None:
+            # Store Output
+            session.output = output
+            
+            # Store Accuracy score and report
+            session.accuracy_report = accuracy
+            if self.algorithm.type.name == "Classifier":
+                session.accuracy_score = accuracy["accuracy"]
+            elif  self.algorithm.type.name == "Regression":
+                session.accuracy_score = 1 - accuracy["mean_squared_error"]
+        else:
+            # Store Output
+            session.output = error_text
+        
+        # Store Trained Model as a pickle file
+        joblib.dump(trained_model, "%s/trained_models/%s.pkl" % (settings.MEDIA_ROOT, self.pk))
+        
+        # Store Finish Time and save Session
+        session.finish_time = datetime.datetime.utcnow().replace(tzinfo=utc)
+        session.save()
+        
+        return prediction
     
     """
     Classes
@@ -463,6 +570,7 @@ class TrainedModelSession(models.Model):
     finish_time = models.DateTimeField(null=True, blank=True)
     output = models.TextField(null=True, blank=True)
     accuracy_score = models.FloatField(null=True, blank=True)
+    accuracy_report = models.TextField(null=True, blank=True)
     
     """
     Methods

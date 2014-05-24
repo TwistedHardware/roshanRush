@@ -2,7 +2,7 @@ import pandas as pd
 #
 from django.db import models
 #
-from data_set.models import DataSet,BooleanFeature,DateFeature,FileFeature,NumberFeature,RecordLinkFeature,TextFeature,Feature
+from data_set.models import DataSet,Feature#BooleanFeature,DateFeature,FileFeature,NumberFeature,RecordLinkFeature,TextFeature,
 
 
 class ImportCSV(models.Model):
