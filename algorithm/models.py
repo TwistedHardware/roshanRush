@@ -331,15 +331,56 @@ class TrainedModel(models.Model):
         Returns a DataFrame object representing the dataset
         """
         # Load all features
-        records = self.dataset.record_set().all().values("id")
-        date_features = DateFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
-        numerical_features = NumberFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
-        boolean_features = BooleanFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
-        text_features = TextFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
-        file_features = FileFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
-        record_link_features = RecordLinkFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value", "data_set__id")
+        records = [item[0] for item in self.dataset.record_set.all().values_list("id")]
+        date_features = list(DateFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
+        numerical_features = list(NumberFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
+        boolean_features = list(BooleanFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
+        text_features = list(TextFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
+        file_features = list(FileFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
+        record_link_features = list(RecordLinkFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value", "data_set__id"))
         
-        dataset = pd.DataFrame(records)
+        # Create dataset with record__id as index
+        dataset = pd.DataFrame({"record__id": records})
+        dataset.set_index("record__id", inplace=True)
+        
+        # Process date features
+        if len(date_features) <> 0:
+            date_df = pd.DataFrame(date_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            date_df = pd.DataFrame()
+        
+        # Process number features
+        if len(numerical_features) <> 0:
+            numerical_df = pd.DataFrame(numerical_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            numerical_df = pd.DataFrame()
+        
+        # Process number features
+        if len(boolean_features) <> 0:
+            boolean_df = pd.DataFrame(boolean_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            boolean_df = pd.DataFrame()
+        
+        # Process number features
+        if len(text_features) <> 0:
+            text_df = pd.DataFrame(text_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            text_df = pd.DataFrame()
+        
+        # Process number features
+        if len(file_features) <> 0:
+            file_df = pd.DataFrame(file_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            file_df = pd.DataFrame()
+        
+        # Process number features
+        if len(record_link_features) <> 0:
+            record_link_df = pd.DataFrame(record_link_features).pivot(index="record__id", columns="feature__name", values="value")
+        else:
+            record_link_df = pd.DataFrame()
+        
+        # Concatenate all features DataFrames to the Main IDs DataFrame and return it
+        return pd.concat([dataset, date_df, numerical_df, boolean_df, text_df, file_df, record_link_df], axis=1)
     
     def train_model(self):
         """
