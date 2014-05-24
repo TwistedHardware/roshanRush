@@ -1,5 +1,8 @@
+import pandas as pd
+#
 from django.db import models
-from data_set.models import DataSet, Feature
+#
+from data_set.models import DataSet, Record, Feature, DateFeature, NumberFeature, BooleanFeature, TextFeature, FileFeature, RecordLinkFeature
 
 class AlgorithmType(models.Model):
     """
@@ -297,19 +300,19 @@ class TrainedModel(models.Model):
         """
         Returns code to prepare features
         """
-        return self.feature_loader.format(feature_set=",".join(self.trainedmodelfeature_set.all().values("feature__name")))
+        return self.feature_preparation.format(feature_set=",".join(["'%s'" % item[0]  for item in self.trainedmodelfeature_set.all().values_list("feature__name")]))
     
     def prepare_result_preparation(self):
         """
         Returns code to prepare results
         """
-        return self.result_preparation.format(result=self.result.name)
+        return self.result_preparation.format(result="'%s'" % self.result.name)
     
     def prepare_training(self):
         """
         Returns code to train a model
         """
-        return self.training.format(parameters=",".join(["=".join(item) for item in self.trainedmodelparameter_set.all().values("parameter__name", "value")]))
+        return self.training.format(parameters=",".join(["=".join(item) for item in self.trainedmodelparameter_set.all().values_list("parameter__name", "value")]))
     
     def prepare_prediction(self):
         """
@@ -322,6 +325,21 @@ class TrainedModel(models.Model):
         Returns code to test accuracy of this model
         """
         return self.test_accuracy
+    
+    def load_dataset(self):
+        """
+        Returns a DataFrame object representing the dataset
+        """
+        # Load all features
+        records = self.dataset.record_set().all().values("id")
+        date_features = DateFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
+        numerical_features = NumberFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
+        boolean_features = BooleanFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
+        text_features = TextFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
+        file_features = FileFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value")
+        record_link_features = RecordLinkFeature.objects.all().filter(record__id__in=records).values("record__id", "features__name", "value", "data_set__id")
+        
+        dataset = pd.DataFrame(records)
     
     def train_model(self):
         """
@@ -374,13 +392,13 @@ class TrainedModelFeature(models.Model):
     feature = models.ForeignKey(Feature)
     trained_model = models.ForeignKey(TrainedModel)
     normalize = models.BooleanField(default=False)
-    pre_process = models.ForeignKey(DataProcess)
+    pre_process = models.ForeignKey(DataProcess, null=True, blank=True)
     
     """
     Methods
     """
     def __unicode__(self):
-        return "%s: %s" % (self.parameter.name, self.value)
+        return "%s" % self.feature.name
     
     """
     Classes
