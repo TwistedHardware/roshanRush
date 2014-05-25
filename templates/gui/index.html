@@ -26,48 +26,49 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainmenu">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Roshan Project</a>
+          <a class="navbar-brand" href="/">Roshan Project</a>
         </div>
-{% block menu %}
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse"  id="mainmenu">
         {% if username %}
+{% block menu %}
         <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
             <li><a href="?page=dataset">Datasets</a></li>
-            <li><a href="#contact">Trained Models</a></li>
+            <li><a href="?page=trainedmodel">Trained Models</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Others<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Processes</a></li>
-                <li><a href="#">Operations</a></li>
-                <li><a href="#">API</a></li>
+                <li><a href="?page=process">Processes</a></li>
+                <li><a href="?page=operation">Operations</a></li>
+                <li><a href="?page=api">API</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Import Data</li>
-                <li><a href="#">CSV</a></li>
-                <li><a href="#">DICOM</a></li>
+                <li><a href="?page=importcsv">CSV</a></li>
+                <li><a href="?page=importdicom">DICOM</a></li>
               </ul>
             </li>
           </ul>
-          <span class="navbar-right navbar-brand">Hi, {{ username }} | <a href="#">Logout</a></span>
+{% endblock %}
+          <span class="navbar-right navbar-brand">Hi, {{ username }} | <a href="/user/?action=logout">Logout</a></span>
           {% else %}
-          <form class="navbar-form navbar-right" role="form">
+          <form class="navbar-form navbar-right" role="form"  method="post" action="/user/?action=login">>
+          {% csrf_token %}
             <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
+              <input name="username" type="text" placeholder="Username" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
+              <input name="password" type="password" placeholder="Password" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
           </form>
           {% endif %}
         </div><!--/.navbar-collapse -->
-{% endblock %}
       </div>
     </div>
 

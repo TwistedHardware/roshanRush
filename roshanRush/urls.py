@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 #
 from api.views import ProcessAPI
-from GUI.views import GetPage
+from GUI.views import GetPage, UserControl
 
 
 admin.autodiscover()
@@ -20,5 +20,6 @@ urlpatterns = patterns('',
 
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+    url(r'^user/$', UserControl.as_view()),
     url(r'$', GetPage.as_view()),
 )
