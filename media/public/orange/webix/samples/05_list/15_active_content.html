@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="../common/testdata.js"></script>
+	<title>List: Active Content</title>
+	<style>
+		.rank{
+			float: left;
+			font-weight: bold;
+			padding: 0 5px;
+		}
+		.title{
+			width: 330px;
+			overflow: hidden;
+			float: left;
+		}
+		.buttons{
+			padding-left: 10px;
+			height: 60px;
+			padding-top:10px;
+			float:right;
+		}
+	</style>
+</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+	webix.ready(function() {
+		/*Create new view that extends List and webix.ActiveContent*/
+		webix.protoUI({
+			name:"activeList"
+		},webix.ui.list,webix.ActiveContent);
+
+
+		webix.ui({
+			view: "activeList",
+			id:"mylist",
+
+			width:650,
+			height:600,
+			template:"#rank#. #title#",
+			select:"multiselect",
+			data:big_film_set,
+			activeContent:{
+				deleteButton:{
+					id:"deleteButtonId",
+					view:"button",
+					label:"Delete",
+					width:120,
+					earlyInit:true
+				},
+				editButton:{
+					id:"editButtonId",
+					view:"button",
+					label:"Edit",
+					width:120,
+					click:editClick
+				}
+			},
+			template: "<div class='rank'>#rank#.</div><div class='title'>#title#<br>#year# year</div><div class='buttons'>{common.deleteButton()}</div><div class='buttons'>{common.editButton()}</div>",
+			type: {
+				height:65
+			}
+
+		});
+		/*Edit click handling*/
+		function editClick(id, e){
+
+			var id = $$('mylist').locate(e);
+			webix.message("Edit "+id);
+		}
+		/*dDelete click handling*/
+		$$('deleteButtonId').attachEvent("onItemClick", function(id, e){
+			var id = $$('mylist').locate(e);
+			webix.message("Delete "+id);
+		});
+
+
+	});
+</script>
+</body>
+</html>

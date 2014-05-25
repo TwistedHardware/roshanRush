@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:300px;
+				height:330px;
+				float: left;
+			}
+		</style>
+		<title>Binding to List</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container: "areaB",
+				id: "form1",
+				view:"form",
+				elements:[
+					{ view:"text", name:"title", label:"Film Title"},
+					{ view:"text", name:"year", label:"Year"},
+					{ view:"text", name:"votes", label:"Votes"},
+					{ view:"button", label:"Save" , type:"form", click:"save_form" },
+					{ view:"button", label:"Clear", click:"$$('form1').clear();" }
+					],
+				rules:{
+					title: webix.rules.isNotEmpty,
+					year: webix.rules.isNumber,
+					votes: webix.rules.isNotEmpty
+				}
+
+			});
+
+			webix.ui({
+				container:"areaA",
+				id: "list1",
+				view:"list", 
+
+				template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+				type:{
+					height:60
+				},
+				select:true,
+
+				data:big_film_set
+			});
+
+
+			$$('form1').bind($$('list1'));
+            $$("list1").select(2);
+			
+			 function save_form(){
+				var form = $$('form1');
+				if(form.isDirty()){
+					if(!form.validate())
+					return false;
+				form.save();}
+			};
+
+		</script>
+	</body>
+</html>

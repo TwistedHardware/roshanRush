@@ -1,7 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
+#
 from api.views import ProcessAPI
+from GUI.views import GetPage
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -16,4 +20,5 @@ urlpatterns = patterns('',
 
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+    url(r'$', GetPage.as_view()),
 )

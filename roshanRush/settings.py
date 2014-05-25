@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'forecast',
     'operation',
     'process',
+    'GUI',
 )
 
 MIDDLEWARE_CLASSES = (

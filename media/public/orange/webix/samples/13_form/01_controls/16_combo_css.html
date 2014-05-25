@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Styling Combo Icons</title>
+	</head>
+	<style type="text/css">
+		.combo_icon{
+    		background-image: url("search.png");
+    		height: 20px;
+    		float: right;
+		}
+	</style>
+	<body>
+		<div id="test" style="width:250px;"></div>
+		
+
+		<script type="text/javascript" charset="utf-8">
+	webix.ui({
+		view:"form", width:300, elements:[
+    		{view:"combo",
+    		container:"test",
+    		label: 'Fruit',
+    		name:"fruit",
+			value:1, 
+			options:[ 
+					{ id:1, value:"Banana"   },
+					{ id:2, value:"Papai"   }, 
+					{ id:3, value:"Apple" }
+				],
+    		iconCss:"combo_icon", 
+    		iconWidth:20
+    		}
+    	]
+	});
+
+
+		</script>
+	</body>
+</html>

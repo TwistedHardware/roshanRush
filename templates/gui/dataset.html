@@ -1,0 +1,134 @@
+{% extends "gui/index.html" %}
+
+{% block menu %}
+        <div class="navbar-collapse collapse">
+        {% if username %}
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="?page=dataset">Datasets</a></li>
+            <li><a href="#contact">Trained Models</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Others<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Processes</a></li>
+                <li><a href="#">Operations</a></li>
+                <li><a href="#">API</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Import Data</li>
+                <li><a href="#">CSV</a></li>
+                <li><a href="#">DICOM</a></li>
+              </ul>
+            </li>
+          </ul>
+          <span class="navbar-right navbar-brand">Hi, {{ username }} | <a href="#">Logout</a></span>
+          {% else %}
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+          {% endif %}
+        </div><!--/.navbar-collapse -->
+{% endblock %}
+
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action 
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Data Sets</h1>
+        <p>This is where all data is stored. Each dataset represents a table.</p>
+        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>-->
+
+    <div class="container" style="margin-top: 50px;">
+      <!-- Example row of columns -->
+      <nav class="navbar navbar-default" role="navigation">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">Dataset Tools</a>
+		    </div>
+		
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li><a href="#"><span class="glyphicon glyphicon-plus"></span> New</a></li>
+		        <li><a href="#"><span class="glyphicon glyphicon-download"></span> Import Data</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sort <b class="caret"></b></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="#">Name</a></li>
+		            <li><a href="#">Type</a></li>
+		            <li><a href="#">Data Group</a></li>
+		            <li><a href="#">Record Count</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		      <form class="navbar-form navbar-left" role="search">
+		        <div class="form-group">
+		          <input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+		      </form>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+      
+      {% for dataset in dataset_list %}
+      <!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="myModalLabel">Confirm deleting a dataset</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div class="alert alert-danger"><strong>WARNING: This is a permenant action and cannot be undone.</strong></div>
+		        <p> Deleting this dataset will permenantly delete all records and features related to "{{ dataset.name }}" dataset. Are you sure you want to delete?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <a href="?page=dataset&action=delete&id={{ dataset.id }}"><button type="button" class="btn btn-danger">Delete Dataset</button></a>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+      <div class="panel panel-default">
+      	<div class="panel-heading">
+      		<strong title="Dataset Name">{{ dataset.name }}</strong> <span class="badge" title="Records Count">{{ dataset.count }}</span>
+      		<div class="pull-right">
+      			<button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-trash"></span></button>
+      			<a href="?page=dataset&action=edit&id={{ dataset.id }}"><button type="button" class="btn btn-default btn-xs" title="Edit"><span class="glyphicon glyphicon-pencil"></span></button></a>
+      			<a href="?page=dataset&action=showdata&id={{ dataset.id }}"><button type="button" class="btn btn-primary btn-xs" title="Show Data"><span class="glyphicon glyphicon-th-list"></span></button></a>
+      		</div>
+      	</div>
+  		<div class="panel-body">
+  			<dl class="dl-horizontal">
+  				<dt><abbr title="Table columns tamplate">Schema</abbr> :</dt>
+  				<dd>{{ dataset.type }}</dd>
+  				<dt>Data Group :</dt>
+  				<dd>{{ dataset.group }}</dd>
+			</dl>
+  		</div>
+      </div>
+      {% endfor %}
+      
+      <hr>
+
+      <footer>
+        <p>&copy; <a href="http://www.tc-sa.com">Tech Curve</a> 2014</p>
+      </footer>
+    </div> <!-- /container -->
+{% endblock %}

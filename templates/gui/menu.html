@@ -1,0 +1,34 @@
+{% block menu %}
+        <div class="navbar-collapse collapse">
+        {% if username %}
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">Datasets</a></li>
+            <li><a href="#contact">Trained Models</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Others<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Processes</a></li>
+                <li><a href="#">Operations</a></li>
+                <li><a href="#">API</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Import Data</li>
+                <li><a href="#">CSV</a></li>
+                <li><a href="#">DICOM</a></li>
+              </ul>
+            </li>
+          </ul>
+          <span class="navbar-right navbar-brand">Hi, {{ username }} | <a href="#">Logout</a></span>
+          {% else %}
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+          {% endif %}
+        </div><!--/.navbar-collapse -->
+{% endblock %}
