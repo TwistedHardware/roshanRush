@@ -74,10 +74,10 @@
 		            		<span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
 		            	{% endif %} Data Group
 		            </a></li>
-		            <li><a href="/?page=dataset&order={% if order != '-record' %}-{% endif %}record">
-		            	{% if order == 'record' %}
+		            <li><a href="/?page=dataset&order={% if order != '-record_count' %}-{% endif %}record_count">
+		            	{% if order == 'record_count' %}
 		            		<span class="glyphicon glyphicon-sort-by-alphabet"></span>
-		            	{% elif order == '-record' %}
+		            	{% elif order == '-record_count' %}
 		            		<span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
 		            	{% endif %} Record Count
 		            </a></li>
@@ -101,11 +101,11 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        <h4 class="modal-title" id="deleteModalLabel{{ dataset.id }}">Confirm deleting a dataset</h4>
+		        <h4 class="modal-title" id="deleteModalLabel{{ dataset.id }}">Confirm deleting <strong>"{{ dataset.name }}"</strong> dataset</h4>
 		      </div>
 		      <div class="modal-body">
 		      	<div class="alert alert-danger"><strong>WARNING: This is a permenant action and cannot be undone.</strong></div>
-		        <p> Deleting this dataset will permenantly delete all records and features related to "{{ dataset.name }}" dataset. Are you sure you want to delete?</p>
+		        <p> Deleting this dataset will permenantly delete all records and features related to <strong>"{{ dataset.name }}"</strong> dataset. Are you sure you want to delete?</p>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

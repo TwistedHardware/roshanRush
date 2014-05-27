@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, logout, login
+from django.db.models import Count
 #
 from data_set.models import DataSet, DataSetType, DataGroup
 
@@ -36,9 +37,18 @@ class GetPage(View):
             # Process actions first
             if action == "delete":
                 DataSet.objects.all().get(id=instance_id).delete()
+            elif action == "showdata":
+                df = DataSet.objects.all().get(id=instance_id).to_DataFrame(truncate=True)
+                context["columns_list"] = df.columns
+                context["record_list"] = df.values[:100]
+                self.template_name = "gui/dataset-showdata.html"
+                # Render and return the DataSets page
+                return render(request, self.template_name, context)
+                
+                
             # Build context for DataSets Page and assign template
             context["dataset_list"] = []
-            for dataset in DataSet.objects.all().order_by(order):
+            for dataset in DataSet.objects.all().annotate(record_count=Count('record')).order_by(order):
                 context["dataset_list"].append({"id": dataset.id,
                                                 "name": dataset.name,
                                                 "type": dataset.type.name,

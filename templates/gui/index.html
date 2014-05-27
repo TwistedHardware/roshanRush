@@ -7,8 +7,7 @@
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		
-		<!-- JQuery -->
-		<script src="/media/public/design1/lib/jquery/jquery-2.1.0.min.js"></script>
+		
 		
 		<!-- Bootstrap -->
 		<script src="/media/public/design1/lib/bootstrap/js/bootstrap.min.js"></script>
@@ -18,11 +17,24 @@
 		<!-- Design1 CSS -->
 		<link rel="stylesheet" href="/media/public/orange/css/style.css">
 		<script src="/media/public/orange/js/mainScript.js"></script>
+		
+		<!-- choose a theme file -->
+		<link rel="stylesheet" href="/media/public/orange/tablesorter-master/css/theme.black-ice.css">
+		<link rel="stylesheet" href="/media/public/orange/tablesorter-master/css/theme.default.css">
+		
 
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
 	<body>
+	
+		 <!-- Bootstrap core JavaScript
+	    ================================================== -->
+	    <!-- JQuery -->
+		<script src="/media/public/design1/lib/jquery/jquery-2.1.0.min.js"></script>
+	    <script type="text/javascript" src="/media/public/orange/tablesorter-master/js/jquery.tablesorter.js"></script>
+		<script type="text/javascript" src="/media/public/orange/tablesorter-master/js/jquery.tablesorter.widgets.js"></script>
+	
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -55,7 +67,7 @@
             </li>
           </ul>
 {% endblock %}
-          <span class="navbar-right navbar-brand">Hi, {{ username }} | <a href="/user/?action=logout">Logout</a></span>
+          <span class="navbar-right" style="color: white; padding-top:20px;">Hello, {{ username }} | <a href="/user/?action=logout">Logout</a></span>
           {% else %}
           <form class="navbar-form navbar-right" role="form"  method="post" action="/user/?action=login">>
           {% csrf_token %}
@@ -76,10 +88,6 @@
 {% block content %}{% endblock %}
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+
 	</body>
 </html>
