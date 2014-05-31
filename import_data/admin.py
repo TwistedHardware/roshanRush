@@ -18,12 +18,12 @@ class ImportCSVAdmin(admin.ModelAdmin):
     """
     list_per_page = 100
     fields = [
-              'file',
-              'data_set',
+              "file",
+              "data_set",
               ]
     list_display = [
-              'file',
-              'data_set',
+              "file",
+              "data_set",
                     ]
     filter_horizontal = []
     list_filter = []
@@ -36,10 +36,12 @@ class ImportDICOMAdmin(admin.ModelAdmin):
     """
     list_per_page = 100
     fields = [
-              'data_set',
+              "data_set",
+              "comppressed_file"
               ]
     list_display = [
-              'data_set',
+              "data_set",
+              "comppressed_file"
                     ]
     filter_horizontal = []
     list_filter = []

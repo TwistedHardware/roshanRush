@@ -1,6 +1,10 @@
 import pandas as pd
+import zipfile
+import os.path
+import os
 #
 from django.db import models
+from roshanRush import settings
 #
 from data_set.models import DataSet,Feature#BooleanFeature,DateFeature,FileFeature,NumberFeature,RecordLinkFeature,TextFeature,
 
@@ -98,6 +102,7 @@ class ImportDICOM(models.Model):
     """
     create_time = models.DateTimeField(auto_now_add=True)
     data_set = models.ForeignKey(DataSet, null=True, blank=True)
+    comppressed_file = models.FileField(upload_to="DICOM", null=True, blank=True)
     
     """
     Methods
@@ -105,6 +110,38 @@ class ImportDICOM(models.Model):
     def ___unicode__(self):
         return self.file.name
     
+    def save(self, *args, **kwargs):
+        """
+        Override the default save to unzip the compressed file (if exists) and add all files inside
+        """
+        if self.pk is None:
+            super(ImportDICOM, self).save(*args, **kwargs)
+            files_list = self.unzip_file()
+            for name, dirname in files_list:
+                if not name in [None, ""] and name.lower().endswith("dcm"):
+                    self.dicomfile_set.all().create(
+                                                import_dicom = self,
+                                                file = "%s/%s" % (dirname, name)
+                                                )
+            
+    
+    def unzip_file(self):
+        """
+        unzips a file and adds all files inside it as DICOMFile(s)
+        """ 
+        files_list = []
+        if not self.comppressed_file is None:
+            zfile = zipfile.ZipFile("%s/%s" % (settings.MEDIA_ROOT, self.comppressed_file.name))
+            for name in zfile.namelist():
+                (dirname, filename) = os.path.split(name)
+                rel_dirname = "DICOM/%s" % (dirname)
+                dirname = "%s/DICOM/" % (settings.MEDIA_ROOT)
+                files_list.append([filename, rel_dirname])
+                if not os.path.exists(dirname):
+                    os.makedirs(dirname)
+                zfile.extract(name, dirname)
+        return files_list
+
     """
     Classes
     """
@@ -136,3 +173,4 @@ class DICOMFile(models.Model):
     class Meta:
         verbose_name = "DICOM File"
         verbose_name_plural = "DICOM Files"
+

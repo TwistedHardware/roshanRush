@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>{% block title %}Roshan{% endblock %}</title>
+		<title>{% block title %}Doctor View{% endblock %}</title>
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,13 +14,11 @@
 		<!-- Design1 CSS -->
 		<link rel="stylesheet" href="/media/public/orange/css/style.css">
 		
-		<!-- choose a theme file -->
-		<link rel="stylesheet" href="/media/public/orange/tablesorter-master/css/theme.black-ice.css">
-		<link rel="stylesheet" href="/media/public/orange/tablesorter-master/css/theme.default.css">
+		 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
-	<body>
+	<body style="background: black;">
 	
 		
 	
@@ -33,7 +31,6 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Roshan Project</a>
         </div>
         <div class="navbar-collapse collapse"  id="mainmenu">
         {% if username %}
@@ -80,11 +77,10 @@
 	    <!-- JQuery -->
 		<script src="/media/public/design1/lib/jquery/jquery-2.1.0.min.js"></script>
 		<script src="/media/public/design1/lib/bootstrap/js/bootstrap.min.js"></script>
-	    <script type="text/javascript" src="/media/public/orange/tablesorter-master/js/jquery.tablesorter.js"></script>
-		<script type="text/javascript" src="/media/public/orange/tablesorter-master/js/jquery.tablesorter.widgets.js"></script>
-		<script src="/media/public/orange/js/mainScript.js"></script>
-		
-{% block scripts %}{% endblock %}
+		<script src="/media/public/orange/js/jquery.mousewheel.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+{% block scripts %}
+{% endblock %}
 
 
 	</body>

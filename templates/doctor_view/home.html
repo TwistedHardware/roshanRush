@@ -1,0 +1,186 @@
+{% extends "doctor_view/index.html" %}
+{% block title %}Doctor View{% endblock %}
+{% block menu %}
+<div class="btn-group btn-group-lg">
+	<div class="btn-group btn-group-lg">
+    	<button type="button" class="btn btn-default dropdown-toggle" title="Windowing" data-toggle="dropdown">
+    		<span class="glyphicon glyphicon-adjust"></span> <span class="caret"></span>
+    	</button>
+    	<ul class="dropdown-menu">
+      		<li><a href="#">Default</a></li>
+      		<li><a href="#">Auto</a></li>
+      		<li><a href="#">Abdomen</a></li>
+      		<li><a href="#">Bone</a></li>
+      		<li><a href="#">Cerebrum</a></li>
+      		<li><a href="#">Liver</a></li>
+      		<li><a href="#">Lung</a></li>
+      		<li><a href="#">Mediastinum</a></li>
+      		<li><a href="#">Pelvis</a></li>
+      		<li><a href="#">Posterior Fossa</a></li>
+    	</ul>
+    </div>
+	<button type="button" class="btn btn-default" title="Hand"><span class="glyphicon glyphicon-move"></span></button>
+	<button type="button" class="btn btn-default" title="Zoom In" onclick="zoonIn('#DICOMImage')"><span class="glyphicon glyphicon-zoom-in"></span></button>
+	<button type="button" class="btn btn-default" title="Zoom Out" onclick="zoonOut('#DICOMImage')"><span class="glyphicon glyphicon-zoom-out"></span></button>
+	<button type="button" class="btn btn-default" title="Rotate"><span class="glyphicon glyphicon-fullscreen"></span></button>
+	<button type="button" class="btn btn-default" title="Rotate"><span class="glyphicon glyphicon-repeat"></span></button>
+	
+	
+</div>
+
+<div class="btn-group btn-group-lg">
+	<button type="button" class="btn btn-default" title="Detect Lesions"><span class="glyphicon glyphicon-record"></span></button>
+	<button type="button" class="btn btn-default" title="Diagnose"><span class="glyphicon glyphicon-list-alt"></span></button>
+</div>
+
+<div class="btn-group btn-group-lg">
+	<div class="btn-group btn-group-lg">
+		<button type="button" class="btn btn-default dropdown-toggle" title="Layout" data-toggle="dropdown">
+			<span class="glyphicon glyphicon-th"></span> <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+      		<li><a href="#">1X1</a></li>
+      		<li><a href="#">2X1</a></li>
+      		<li><a href="#">2X2</a></li>
+    	</ul>
+	</div>
+	<button type="button" class="btn btn-default" title="Side Thumbnails"><span class="glyphicon glyphicon-th-list"></span></button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container lefttoolbar" style="">
+	<div id="windowCenter"></div>
+	<div id="windowWidth"></div>
+	<div id="stats" style=" margin:2px; color: white; font-family: 'Courier New'; position:absolute; display:inline-block; top:20px; left:20px;">
+	<p style="margin:0px;">Slide: <strong id="slide_number" style="color: yellow">0</strong></p>
+	<p style="margin:0px;">W. Value: <strong id="w_value" style="color: yellow">0.0</strong></p>
+	<p style="margin:0px;">W. Width: <strong id="w_width" style="color: yellow">0.0</strong></p>
+	</div>
+{% for series in series_list %}
+<p class="ui-state-default ui-corner-all ui-helper-clearfix" style="padding:4px;">
+<span class="ui-icon ui-icon-image" style="float:left; margin:-2px 5px 0 0;"></span>
+Series {{ series.seriesid }}
+</p>
+{% for image in series.images %}
+<div contrast-data="{{ image.window_center }},{{ image.window_width }},{{ image.max_color }},{{ image.min_color }}" id="img{{ series.seriesid }}_{{ image.instackid }}_{{ image.instanceid }}" class="dicom_thumbnail" onclick="loadImage('/dicomimage/?studyid={{ studyid }}&amp;seriesid={{ series.seriesid }}&amp;instackid={{ image.instackid }}&amp;1&amp;instanceid={{ image.instanceid }}', '#img{{ series.seriesid }}_{{ image.instackid }}_{{ image.instanceid }}', '#DICOMImage')" title="{{ image.instanceid }}">
+<img src="/dicomimage/?studyid={{ studyid }}&amp;seriesid={{ series.seriesid }}&amp;instackid={{ image.instackid }}&amp;1&amp;instanceid={{ image.instanceid }}&amp;size=32" style="width:32px; height: 32px; margin: 0px;">
+</div>
+{% endfor %}
+{% endfor %}
+</div> <!-- /container -->
+
+<div class="container" style="padding: 0px; position:absolute; margin-top: 50px;  margin-left:200px;width:auto;">
+
+	<div id="DICOMBox">
+		<img id="DICOMImage" unselectable="on" >
+	</div>
+	
+
+
+</div> <!-- /container -->
+{% endblock %}
+{% block scripts %}
+<script>
+active_image = "";
+currect_path = "";
+start_point = "";
+dragging = false;
+start_values = [];
+$('#DICOMImage').on('mousewheel', function(event) {
+    console.log(event.deltaX, event.deltaY, event.deltaFactor);
+    if (event.deltaY > 0)
+    	$(active_image).next().trigger("click");
+    else
+    	$(active_image).prev().trigger("click");
+});
+
+function loadImage(path, thumbnail, target) {
+	//$(target).attr("src",path);
+	currect_path = path;
+	$(".dicom_thumbnail").css("border-color", "gray");
+	$(thumbnail).css("border-color", "red");
+	//Get Contract Data
+	contrast_data = $(thumbnail).attr("contrast-data").split(",");
+	$("#windowCenter").slider({value:parseInt(contrast_data[0]), range:"min", min:parseInt(contrast_data[3]), max:parseInt(contrast_data[2])});
+	//$("#windowCenter").slider("max", contrast_data[2]);
+	//$("#windowCenter").slider("min", contrast_data[3]);
+	
+	$("#windowWidth").slider({value:parseInt(contrast_data[1]), range:"min", min:parseInt(contrast_data[3]), max:parseInt(contrast_data[2])});
+	//$("#windowWidth").slider("range", [contrast_data[3], contrast_data[2]]);
+	//$("#windowWidth").slider("min", contrast_data[3]);
+
+	active_image = thumbnail;
+	$( target ).attr("src", path + "&windowcenter=" + $( "#windowCenter" ).slider("value") + "&windowwidth=" + $( "#windowWidth" ).slider("value") );
+	$( "#w_value" ).text($( "#windowCenter" ).slider("value"));
+	$( "#w_width" ).text($( "#windowWidth" ).slider("value"));
+	$( "#slide_number" ).text($(thumbnail).attr("title"));
+	
+}
+function zoonIn(target)
+{
+	s = $(target).css("width");
+	s = parseInt(s.substring(0, s.length - 2)) * 1.1;
+	
+	$(target).css("width", s + "px");
+}
+function zoonOut(target)
+{
+	s = $(target).css("width");
+	s = parseInt(s.substring(0, s.length - 2)) * 0.9;
+	
+	$(target).css("width", s + "px");
+}
+
+$("#windowCenter").slider({ slide: function( event, ui ) {
+								$( "#DICOMImage" ).attr("src", currect_path + "&windowcenter=" + $( "#windowCenter" ).slider("value") + "&windowwidth=" + $( "#windowWidth" ).slider("value") );
+								$( "#w_value" ).html($( "#windowCenter" ).slider("value"));
+								
+								
+							}
+							});
+$("#windowWidth").slider({orientation: "vertical",
+	slide: function( event, ui ) {
+		$( "#DICOMImage" ).attr("src", currect_path + "&windowcenter=" + $( "#windowCenter" ).slider("value") + "&windowwidth=" + $( "#windowWidth" ).slider("value") );
+		$( "#w_width" ).html($( "#windowWidth" ).slider("value"));
+	}
+	});
+
+$('#DICOMImage').on('dragstart', function(event) { 
+	event.preventDefault();
+	dragging = true;
+	start_point = [event.originalEvent.screenX ,event.originalEvent.screenY ];
+	start_values = [$( "#windowCenter" ).slider("value"), $("#windowWidth").slider("value")]
+});
+$('#DICOMImage').on("mousemove", function(event){
+	if (dragging)
+	{
+		$( "#windowCenter" ).slider("value", start_values[0] - (start_point[0]-event.screenX));
+		$( "#windowWidth" ).slider("value", start_values[1] - (event.screenY-start_point[1]));
+		$( "#DICOMImage" ).attr("src", currect_path + "&windowcenter=" + $( "#windowCenter" ).slider("value") + "&windowwidth=" + $( "#windowWidth" ).slider("value") );
+		$( "#w_value" ).text($( "#windowCenter" ).slider("value"));
+		$( "#w_width" ).text($( "#windowWidth" ).slider("value"));
+	}
+	
+	
+});
+$('#DICOMImage').on('mouseup', function(event) { 
+	event.preventDefault();
+	dragging = false;
+	contrast_data = $(active_image).attr("contrast-data").split(",");
+	contrast_data[0] = $( "#windowCenter" ).slider("value");
+	contrast_data[1] = $( "#windowWidth" ).slider("value");
+	$(active_image).attr("contrast-data", contrast_data.join(","));
+});
+//$("body").on("keydown", function(e){
+//	if(e.keyCode === 39) {
+//		//Left
+//		$(active_image).next().trigger("click");
+//	}
+//	else if(e.keyCode === 38) {
+//		$(active_image).prev().trigger("click");
+//	}
+//}
+</script>
+{% endblock %}
+

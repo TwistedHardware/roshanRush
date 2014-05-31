@@ -58,3 +58,7 @@ docs/_build/
 
 # Pickle Files
 *.pkl
+*.zip
+
+# Ignore Cache Folder
+media/cache/*

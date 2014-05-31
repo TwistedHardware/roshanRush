@@ -55,3 +55,9 @@ docs/_build/
 # DICOM and CSV Files
 *.dcm
 *.csv
+
+# Pickle Files
+*.pkl
+
+# Ignore Cache Folder
+media/cache/*

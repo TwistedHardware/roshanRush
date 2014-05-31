@@ -70,12 +70,16 @@ class DataSet(models.Model):
     def __unicode__(self):
         return self.name
     
-    def to_DataFrame(self, truncate=False):
+    def to_DataFrame(self, truncate=False, filter_features=None):
         """
         Returns a dataframe representing the dataset
         """
         # Load all features
-        records = [item[0] for item in self.record_set.all().values_list("id")]
+        if filter_features:
+            records = NumberFeature.objects.all().filter(feature__name=filter_features[0], value=filter_features[1]).values_list("record__id")
+            records = [item[0] for item in records]
+        else:
+            records = [item[0] for item in self.record_set.all().values_list("id")]
         date_features = list(DateFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
         numerical_features = list(NumberFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
         boolean_features = list(BooleanFeature.objects.all().filter(record__id__in=records).values("record__id", "feature__name", "value"))
