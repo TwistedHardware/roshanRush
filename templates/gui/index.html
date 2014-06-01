@@ -58,7 +58,7 @@
 {% endblock %}
           <span class="navbar-right" style="color: white; padding-top:20px;">Hello, {{ username }} | <a href="/user/?action=logout">Logout</a></span>
           {% else %}
-          <form class="navbar-form navbar-right" role="form"  method="post" action="/user/?action=login">>
+          <form class="navbar-form navbar-right" role="form"  method="post" action="/user/?action=login&next={{ request.get_full_path|urlencode }}">>
           {% csrf_token %}
             <div class="form-group">
               <input name="username" type="text" placeholder="Username" class="form-control">

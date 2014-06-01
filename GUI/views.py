@@ -263,6 +263,7 @@ class UserControl(View):
         if action == "login":
             username = request.REQUEST.get("username", None)
             password = request.REQUEST.get("password", None)
+            next_page = request.REQUEST.get("next", None)
             user = authenticate(username=username, password=password)
             if user is not None:
                 # the password verified for the user
@@ -270,7 +271,12 @@ class UserControl(View):
                     logout(request)
                 else:
                     login(request, user)
-            return redirect("/")
+            # Check if there is a target page
+            if next_page:
+                return redirect(next_page)
+            else:
+                return redirect("/")
+            
 
             
     def get(self, request, *args, **kwargs):
